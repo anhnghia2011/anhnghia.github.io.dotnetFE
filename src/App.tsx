@@ -1,29 +1,11 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import Home from './container/HomePage';
 
-const Products = () => {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    axios.get('http://localhost:5099/api/Products')
-      .then(response => {
-        setProducts(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the products!', error);
-      });
-  }, []);
-
+function App() {
   return (
     <div>
-      <h1>Products List</h1>
-      <ul>
-        {products.map(product => (
-          <li key={product.id}>{product.name}</li>
-        ))}
-      </ul>
+      <Home />
     </div>
   );
-};
+}
 
-export default Products;
+export default App;
