@@ -3,6 +3,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ReactPlayer from 'react-player';
+import logo from '../assets/nikelogo.png';
 
 function NavHeader() {
     return (
@@ -11,7 +12,7 @@ function NavHeader() {
                 <div className='flex justify-between p-4 bg-gray-100 gap-96 items-center mb-4'>
                     <div className='w-1/5'>
                         <img 
-                            src="https://th.bing.com/th/id/R.70f60679dcef80efc5e667730417c66a?rik=1d88FElxR3hCig&pid=ImgRaw&r=0" 
+                            src={logo}
                             alt="logo" 
                             className='w-20 object-contain' 
                         />
