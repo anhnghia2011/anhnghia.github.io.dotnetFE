@@ -7,9 +7,9 @@ import logo from '../assets/nikelogo.png';
 
 function NavHeader() {
     return (
-        <div className='w-full bg-gray-100'>
+        <div className='w-full'>
             <div className='max-w-[1440px] mx-auto'>
-                <div className='flex justify-between p-4 bg-gray-100 gap-96 items-center mb-4'>
+                <div className='flex justify-between p-4 gap-96 items-center mb-4'>
                     <div className='w-1/5'>
                         <img 
                             src={logo}

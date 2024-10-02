@@ -9,6 +9,9 @@ module.exports = {
       width: {
         '1440': '1440px',
       },
+      borderRadius: {
+        '50': '50%',
+      },
     },
   },
   plugins: [],
