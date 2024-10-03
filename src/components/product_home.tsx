@@ -33,12 +33,10 @@ const ProductList: React.FC = () => {
   useEffect(() => {
       const fetchProducts = async () => {
           const payload = {
-              categoryId: "2"
+              Gender: "Male"
           }
       try {
-        const response = await axios.get<Product[]>('http://localhost:5099/api/Products', {
-          params: payload
-        });
+        const response = await axios.get<Product[]>('http://localhost:5099/api/Products',payload);
         setProducts(response.data);
         setLoading(false);
       } catch (err) {
@@ -55,11 +53,11 @@ const ProductList: React.FC = () => {
   if (error) return <p>{error}</p>;
 
   const settings = {
-    dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
+    autoplay: true,
   };
 
   return (
