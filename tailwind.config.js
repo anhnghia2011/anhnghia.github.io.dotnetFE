@@ -8,6 +8,10 @@ module.exports = {
     extend: {
       width: {
         '1440': '1440px',
+        '500': '500px',
+      },
+      height: {
+        '300': '300px',
       },
       borderRadius: {
         '50': '50%',

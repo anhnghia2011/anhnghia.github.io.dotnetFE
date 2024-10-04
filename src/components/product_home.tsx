@@ -3,6 +3,7 @@ import axios from 'axios';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import "../style.css";
 
 interface Category {
   id: number;
@@ -27,34 +28,24 @@ interface Product {
 
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+
 
   useEffect(() => {
       const fetchProducts = async () => {
-          const payload = {
-              Gender: "Male"
-          }
       try {
-        const response = await axios.get<Product[]>('http://localhost:5099/api/Products',payload);
+        const response = await axios.get<Product[]>('http://localhost:5099/api/Products/spotlight');
         setProducts(response.data);
-        setLoading(false);
       } catch (err) {
         console.error(err);
-        setError('Error fetching products');
-        setLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-
   const settings = {
     infinite: true,
-    speed: 500,
+    speed: 1000,
     slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: true,
@@ -63,15 +54,16 @@ const ProductList: React.FC = () => {
   return (
     <div className='w-full'>
       <div className='max-w-[1440px] mx-auto'>
-        <h1 className='text-center text-2xl font-bold mb-4'>Classics Spotlight</h1>
+        <h1 className='text-start text-2xl font-bold mt-3 pl-5'>Classics Spotlight</h1>
+        <div className='spotlight'>
         <Slider {...settings}>
           {products.slice(0, 10).map((product) => (
             <div key={product.id} className='p-2'>
               <img src={product.imageUrl} alt={product.name} className='w-full object-contain' />
-              <h2 className='text-center mt-2'>{product.name}</h2>
             </div>
           ))}
         </Slider>
+          </div>
       </div>
     </div>
   );
