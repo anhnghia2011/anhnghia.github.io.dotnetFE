@@ -1,18 +1,15 @@
-// RegisterModal.jsx
 import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { Form, Input, Button } from 'antd';
+import logo from '../assets/nikelogo.png';
 
 const RegisterModal = ({ isOpen, onClose }) => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [password, setPassword] = useState('');
     const [reCaptchaToken, setReCaptchaToken] = useState('');
     const [error, setError] = useState('');
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const onFinish = async (values) => {
+        const { firstName, lastName, email, phoneNumber, password } = values;
+        
         if (!reCaptchaToken) {
             setError('Please complete the reCAPTCHA.');
             return;
@@ -48,7 +45,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
         }
     };
 
-    const onReCaptchaChange = (token: string) => {
+    const onReCaptchaChange = (token:string) => {
         setReCaptchaToken(token);
     };
 
@@ -56,72 +53,71 @@ const RegisterModal = ({ isOpen, onClose }) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-4 rounded shadow-md w-1/3">
-                <h2 className="text-lg font-bold mb-4">Register</h2>
+            <div className="bg-white p-4 rounded shadow-md w-1/3 flex flex-col">
+                <img src={logo} alt="Nike Logo" className='float-left w-11 object-cover mb-5'/>
+                <h2 className="text-lg font-bold mb-4 text-center">Register</h2>
                 {error && <p className="text-red-500 mb-2">{error}</p>}
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block mb-1" htmlFor="firstName">First Name:</label>
-                        <input 
-                            className="border border-gray-300 p-2 w-full" 
-                            type="text" 
-                            id="firstName" 
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            required 
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="block mb-1" htmlFor="lastName">Last Name:</label>
-                        <input 
-                            className="border border-gray-300 p-2 w-full" 
-                            type="text" 
-                            id="lastName" 
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            required 
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="block mb-1" htmlFor="email">Email:</label>
-                        <input 
-                            className="border border-gray-300 p-2 w-full" 
-                            type="email" 
-                            id="email" 
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required 
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="block mb-1" htmlFor="phoneNumber">Phone Number:</label>
-                        <input 
-                            className="border border-gray-300 p-2 w-full" 
-                            type="text" 
-                            id="phoneNumber" 
-                            value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                            required 
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="block mb-1" htmlFor="password">Password:</label>
-                        <input 
-                            className="border border-gray-300 p-2 w-full" 
-                            type="password" 
-                            id="password" 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required 
-                        />
-                    </div>
+                
+                <Form
+                    layout="vertical"
+                    onFinish={onFinish}
+                    autoComplete="off"
+                >
+                    <Form.Item
+                        label="First Name"
+                        name="firstName"
+                        rules={[{ required: true, message: 'Please enter your first name' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Last Name"
+                        name="lastName"
+                        rules={[{ required: true, message: 'Please enter your last name' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Email"
+                        name="email"
+                        rules={[{ required: true, type: 'email', message: 'Please enter a valid email' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Phone Number"
+                        name="phoneNumber"
+                        rules={[{ required: true, message: 'Please enter your phone number' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[{ required: true, message: 'Please enter your password' }]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
+
                     <ReCAPTCHA
                         sitekey="6Leo6VkqAAAAAGnZKkjTKpSp6cBWfxsSlSzPhtWQ" 
                         onChange={onReCaptchaChange}
+                        className="flex justify-center mb-4"
                     />
-                    <button type="submit" className="bg-blue-500 text-white p-2 rounded mt-4">Register</button>
-                    <button type="button" onClick={onClose} className="ml-2 p-2 rounded">Close</button>
-                </form>
+
+                    <div className='flex flex-col w-full'>
+                        <Button type="primary" htmlType="submit" className="bg-blue-500 text-white p-5 rounded-3xl mt-4">
+                            Register
+                        </Button>
+                        <Button onClick={onClose} className="p-5 mt-4 rounded-3xl">
+                            Close
+                        </Button>
+                    </div>
+                </Form>
             </div>
         </div>
     );

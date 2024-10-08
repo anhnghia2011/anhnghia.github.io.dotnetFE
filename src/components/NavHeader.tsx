@@ -1,21 +1,46 @@
-// NavHeader.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ReactPlayer from 'react-player';
 import logo from '../assets/nikelogo.png';
-import LoginModal from '../components/LoginModal'; // Import LoginModal
+import LoginModal from '../components/LoginModal';
 
 function NavHeader() {
-    const [isModalOpen, setIsModalOpen] = useState(false); // State để quản lý trạng thái modal
+    const [isModalOpen, setIsModalOpen] = useState(false); // State for login modal
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
+    const [lastName, setLastName] = useState(''); // State for user's last name
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for profile dropdown
+
+    // Check if the user is logged in when the component mounts
+    useEffect(() => {
+        const userDataString = localStorage.getItem('user'); // Retrieve user data from localStorage
+        const userData = userDataString ? JSON.parse(userDataString) : null; // Parse only if not null
+        if (userData && userData.lastName) {
+            setIsLoggedIn(true); // User is logged in
+            setLastName(userData.lastName); // Set the user's last name
+        }
+    }, []);
 
     const handleLoginClick = () => {
-        setIsModalOpen(true); // Mở modal khi nhấn nút login
+        if (!isLoggedIn) {
+            setIsModalOpen(true); // Open login modal if not logged in
+        } else {
+            setIsDropdownOpen((prev) => !prev); // Toggle dropdown if logged in
+        }
     };
 
     const handleCloseModal = () => {
-        setIsModalOpen(false); // Đóng modal
+        setIsModalOpen(false); // Close login modal
+    };
+
+    const handleLogout = () => {
+        // Clear local storage and log the user out
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+        setIsDropdownOpen(false);
+        window.location.reload(); // Reload page to reflect logout
     };
 
     return (
@@ -38,16 +63,48 @@ function NavHeader() {
                             <li>Sale</li>
                         </ul>
                     </div>
-                    <div className='w-1/5 flex justify-between'>
+                    <div className='w-1/5 flex justify-between items-center gap-4'>
                         <ShoppingBagIcon />
                         <FavoriteBorderIcon />
-                        <button 
-                            onClick={handleLoginClick} 
-                            style={{ display: 'flex', alignItems: 'center' }}
-                        >
-                            <AccountCircleIcon style={{ marginRight: '8px' }} />
-                            Login
-                        </button>
+                        <div className="relative">
+                            <button 
+                                onClick={handleLoginClick} 
+                                className='flex items-center rounded-2xl bg-red-200 px-2 py-1'
+                                onMouseEnter={() => setIsDropdownOpen(true)} // Open dropdown on hover
+                                onMouseLeave={() => setIsDropdownOpen(false)} // Close dropdown when not hovering
+                            >
+                                {isLoggedIn ? (
+                                    <>
+                                        <span>{lastName}</span> 
+                                        <AccountCircleIcon style={{ marginLeft: '8px' }} />
+                                    </>
+                                ) : (
+                                    <>
+                                        <AccountCircleIcon style={{ marginRight: '8px' }} />
+                                        <span>Login</span>
+                                    </>
+                                )}
+                            </button>
+
+                            {/* Dropdown menu for profile */}
+                            {isLoggedIn && isDropdownOpen && (
+                                <div 
+                                    className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg py-2"
+                                    onMouseEnter={() => setIsDropdownOpen(true)}
+                                    onMouseLeave={() => setIsDropdownOpen(false)}
+                                >
+                                    <a href="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">
+                                        Profile
+                                    </a>
+                                    <button 
+                                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-200"
+                                        onClick={handleLogout}
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -65,7 +122,7 @@ function NavHeader() {
                 </div>
             </div>
 
-            {/* Render modal login */}
+            {/* Render the login modal */}
             <LoginModal isOpen={isModalOpen} onClose={handleCloseModal} />
         </div>
     );

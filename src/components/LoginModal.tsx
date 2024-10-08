@@ -1,22 +1,31 @@
-// LoginModal.jsx
+// LoginModal.tsx
 import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import RegisterModal from '../components/RegisterModal'; // Import RegisterModal
+import { Input, Button } from "antd";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import RegisterModal from '../components/RegisterModal';
+import logo from '../assets/nikelogo.png';
 
-const LoginModal = ({ isOpen, onClose }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [reCaptchaToken, setReCaptchaToken] = useState('');
-    const [error, setError] = useState('');
-    const [isRegisterOpen, setIsRegisterOpen] = useState(false); // State for registration modal
+interface LoginModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
 
-    const handleSubmit = async (e) => {
+const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
+    const [email, setEmail] = useState<string>(''); // Add type for state
+    const [password, setPassword] = useState<string>(''); // Add type for state
+    const [reCaptchaToken, setReCaptchaToken] = useState<string>(''); // Add type for state
+    const [error, setError] = useState<string>(''); // Add type for state
+    const [isRegisterOpen, setIsRegisterOpen] = useState<boolean>(false); // Add type for state
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!reCaptchaToken) {
             setError('Please complete the reCAPTCHA.');
             return;
         }
-        
+
         try {
             const response = await fetch('http://localhost:5099/api/Customers/login', {
                 method: 'POST',
@@ -33,66 +42,80 @@ const LoginModal = ({ isOpen, onClose }) => {
             const data = await response.json();
 
             if (response.ok) {
-                console.log('Login successful:', data);
+                localStorage.setItem('token', reCaptchaToken);
+                localStorage.setItem('user', JSON.stringify(data));
+                toast.success('Login successful!');
                 onClose();
+                window.location.reload();
             } else {
                 setError(data.message || 'Login failed.');
+                toast.error('Login failed!');
             }
         } catch (error) {
             console.error('Error during login:', error);
             setError('An error occurred during login. Please try again.');
+            toast.error('Login failed!');
         }
     };
 
-    const onReCaptchaChange = (token: string) => {
-        setReCaptchaToken(token);
+    const onReCaptchaChange = (token: string | null) => {
+        if (token) {
+            setReCaptchaToken(token);
+        }
     };
 
     if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-4 rounded shadow-md w-1/3">
-                <h2 className="text-lg font-bold mb-4">Login</h2>
+            <div className="bg-white p-4 rounded shadow-md w-1/3 flex flex-col">
+            <img src={logo}  className='float-left w-11 object-cover mb-5'/>
+                <h2 className="text-lg font-bold mb-4 text-center">Login</h2>
                 {error && <p className="text-red-500 mb-2">{error}</p>}
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label className="block mb-1" htmlFor="email">Email:</label>
-                        <input 
-                            className="border border-gray-300 p-2 w-full" 
-                            type="email" 
-                            id="email" 
+                        <Input
+                            type="email"
+                            id="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            required 
+                            required
                         />
                     </div>
                     <div className="mb-4">
                         <label className="block mb-1" htmlFor="password">Password:</label>
-                        <input 
-                            className="border border-gray-300 p-2 w-full" 
-                            type="password" 
-                            id="password" 
+                        <Input
+                            type="password"
+                            id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            required 
+                            required
                         />
                     </div>
                     <ReCAPTCHA
-                        sitekey="6Leo6VkqAAAAAGnZKkjTKpSp6cBWfxsSlSzPhtWQ" 
+                        sitekey="6Leo6VkqAAAAAGnZKkjTKpSp6cBWfxsSlSzPhtWQ"
                         onChange={onReCaptchaChange}
+                        className="flex justify-center"
                     />
-                    <button type="submit" className="bg-blue-500 text-white p-2 rounded mt-4">Login</button>
-                    <button type="button" onClick={onClose} className="ml-2 p-2 rounded">Close</button>
+                    <div className='flex flex-col w-full'>
+                        <Button className="bg-blue-500 text-white p-2 rounded-2xl mt-4" onClick={handleSubmit}>
+                            Login
+                        </Button>
+                        <Button onClick={onClose} className="p-2 mt-4 rounded-2xl">
+                            Maybe Later
+                        </Button>
+                    </div>
                 </form>
-                <button 
-                    onClick={() => setIsRegisterOpen(true)} 
-                    className="mt-4 text-blue-500 underline">
+                <button
+                    onClick={() => setIsRegisterOpen(true)}
+                    className="mt-4 text-blue-500 underline text-right">
                     Don't have an account? Sign Up
                 </button>
                 {/* Register Modal */}
                 <RegisterModal isOpen={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />
             </div>
+            <ToastContainer />
         </div>
     );
 };
