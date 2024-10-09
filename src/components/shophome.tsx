@@ -1,4 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 function Shophome() {
+    const navigate = useNavigate();
+
+    const handleClickRun = () => {
+        navigate(`/run-shoe`);
+    }
 
     return (
         <div className='w-full'>
@@ -11,8 +17,9 @@ function Shophome() {
                         style={{
                             backgroundImage: `url("https://static.nike.com/a/images/f_auto/dpr_2.0,cs_srgb/w_599,c_limit/a3c971bc-bc0a-4c0c-8bdf-e807a3027e53/nike-just-do-it.jpg")`,
                             backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                        }}>
+                            backgroundPosition: 'center'
+                        }}
+                        onClick={handleClickRun}>
                         <button 
                             className='absolute left-3 bottom-3 p-2 rounded-2xl text-black bg-white'>
                             Running
