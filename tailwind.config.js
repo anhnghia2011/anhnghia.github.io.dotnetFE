@@ -12,6 +12,8 @@ module.exports = {
       },
       height: {
         '300': '300px',
+        '1000': '1000px',
+        '500': '500px',
       },
       borderRadius: {
         '50': '50%',

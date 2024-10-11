@@ -5,6 +5,21 @@ function Shophome() {
     const handleClickRun = () => {
         navigate(`/run-shoe`);
     }
+    const handleClickSoccer = () => {
+        navigate(`/soccer-shoe`);
+    }
+    const handleClickBasketball = () => {
+        navigate(`/basketball-shoe`);
+    }
+    const handleClickGym = () => {
+        navigate(`/gym-shoe`);
+    }
+    const handleClickDance = () => {
+        navigate(`/dance-shoe`);
+    }
+    const handleClickYoga = () => {
+        navigate(`/yoga-shoe`);
+    }
 
     return (
         <div className='w-full'>
@@ -32,7 +47,8 @@ function Shophome() {
                             backgroundImage: `url("https://static.nike.com/a/images/f_auto/dpr_2.0,cs_srgb/w_599,c_limit/e4695209-3f23-4a05-a9f9-d0edde31b653/nike-just-do-it.jpg")`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
-                        }}>
+                        }}
+                        onClick={handleClickSoccer}>
                         <button 
                             className='absolute left-3 bottom-3 p-2 rounded-2xl text-black bg-white'>
                             Soccer
@@ -45,7 +61,8 @@ function Shophome() {
                             backgroundImage: `url("https://static.nike.com/a/images/f_auto/dpr_2.0,cs_srgb/w_599,c_limit/38ed4b8e-9cfc-4e66-9ddd-02a52314eed9/nike-just-do-it.jpg")`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
-                        }}>
+                        }}
+                        onClick={handleClickBasketball}>
                         <button 
                             className='absolute left-3 bottom-3 p-2 rounded-2xl text-black bg-white'>
                             Basketball
@@ -58,7 +75,8 @@ function Shophome() {
                             backgroundImage: `url("https://static.nike.com/a/images/f_auto/dpr_2.0,cs_srgb/w_599,c_limit/e36a4a2b-4d3f-4d1c-bc75-d6057b7cec87/nike-just-do-it.jpg")`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
-                        }}>
+                        }}
+                        onClick={handleClickGym}>
                         <button 
                             className='absolute left-3 bottom-3 p-2 rounded-2xl text-black bg-white'>
                             Gym
@@ -71,7 +89,8 @@ function Shophome() {
                             backgroundImage: `url("https://static.nike.com/a/images/f_auto/dpr_2.0,cs_srgb/w_599,c_limit/c779e4f6-7d91-46c3-9282-39155e0819e5/nike-just-do-it.jpg")`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
-                        }}>
+                        }}
+                        onClick={handleClickDance}>
                         <button 
                             className='absolute left-3 bottom-3 p-2 rounded-2xl text-black bg-white'>
                             Dance
@@ -84,7 +103,8 @@ function Shophome() {
                             backgroundImage: `url("https://static.nike.com/a/images/f_auto/dpr_2.0,cs_srgb/w_599,c_limit/6be55ac6-0243-42d6-87d0-a650074c658c/nike-just-do-it.jpg")`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
-                        }}>
+                        }}
+                        onClick={handleClickYoga}>
                         <button 
                             className='absolute left-3 bottom-3 p-2 rounded-2xl text-black bg-white'>
                             Yoga

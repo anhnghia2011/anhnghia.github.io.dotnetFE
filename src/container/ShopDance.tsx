@@ -1,11 +1,11 @@
 import NavHeader from '../components/NavHeader';
 import Footer from '../components/Footer';
-import Shoprun from '../components/shoprun'
+import Shopdance from '../components/shopdance'
 function ShopRun() {
     return (
         <div className='shop'>
             <NavHeader />
-            <Shoprun />
+            <Shopdance />
             <Footer />
         </div>
     );

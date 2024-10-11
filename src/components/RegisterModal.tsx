@@ -3,11 +3,15 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { Form, Input, Button } from 'antd';
 import logo from '../assets/nikelogo.png';
 
-const RegisterModal = ({ isOpen, onClose }) => {
+interface RegisterModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
     const [reCaptchaToken, setReCaptchaToken] = useState('');
     const [error, setError] = useState('');
-
-    const onFinish = async (values) => {
+    const onFinish = async (values: { firstName: string; lastName: string; email: string; phoneNumber: string; password: string }) => {
         const { firstName, lastName, email, phoneNumber, password } = values;
         
         if (!reCaptchaToken) {
@@ -45,8 +49,8 @@ const RegisterModal = ({ isOpen, onClose }) => {
         }
     };
 
-    const onReCaptchaChange = (token:string) => {
-        setReCaptchaToken(token);
+    const onReCaptchaChange = (token: string | null) => {
+        setReCaptchaToken(token || '');
     };
 
     if (!isOpen) return null;

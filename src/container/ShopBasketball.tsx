@@ -1,11 +1,12 @@
 import NavHeader from '../components/NavHeader';
 import Footer from '../components/Footer';
-import Shoprun from '../components/shoprun'
+import Shopbasketball from '../components/shopbasketball'
+
 function ShopRun() {
     return (
         <div className='shop'>
             <NavHeader />
-            <Shoprun />
+            <Shopbasketball />
             <Footer />
         </div>
     );

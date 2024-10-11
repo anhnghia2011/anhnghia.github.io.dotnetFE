@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -12,15 +12,12 @@ function NavHeader() {
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const [isLoggedIn, setIsLoggedIn] = useState(false); 
     const [lastName, setLastName] = useState(''); 
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
 
     
     const handclickhome = () => {
         navigate('/');
     }
 
-
-    // Check if the user is logged in when the component mounts
     useEffect(() => {
         const userDataString = localStorage.getItem('user');
         const userData = userDataString ? JSON.parse(userDataString) : null;
@@ -30,14 +27,6 @@ function NavHeader() {
         }
     }, []);
 
-    const handleLoginClick = () => {
-        if (!isLoggedIn) {
-            setIsModalOpen(true); 
-        } else {
-            setIsDropdownOpen((prev) => !prev);
-        }
-    };
-
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
@@ -46,9 +35,8 @@ function NavHeader() {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         setIsLoggedIn(false);
-        setIsDropdownOpen(false);
-        window.location.reload(); 
-    };
+        window.location.reload();
+        };
 
     return (
         <div className='w-full'>
@@ -76,8 +64,7 @@ function NavHeader() {
                        <FavoriteBorderIcon />
                        <div className="relative group">
                            <button 
-                               onClick={handleLoginClick} 
-                               className='flex items-center rounded-2xl bg-red-200 px-2 py-1'>
+                               className='flex items-center rounded-2xl bg-red-200 px-2 py-1 shadow-lg'>
                                {isLoggedIn ? (
                             <>
                                    <span>{lastName}</span> 
@@ -118,11 +105,10 @@ function NavHeader() {
                         controls={true}
                         width="100%"
                         height="540px"
+                        className='object-cover shop-video'
                     />
                 </div>
             </div>
-
-            {/* Render the login modal */}
             <LoginModal isOpen={isModalOpen} onClose={handleCloseModal} />
         </div>
     );

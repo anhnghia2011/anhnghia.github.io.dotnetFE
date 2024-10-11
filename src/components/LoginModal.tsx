@@ -69,7 +69,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-white p-4 rounded shadow-md w-1/3 flex flex-col">
-            <img src={logo}  className='float-left w-11 object-cover mb-5'/>
+            <img src={logo} alt="Nike Logo" className='float-left w-11 object-cover mb-5'/>
                 <h2 className="text-lg font-bold mb-4 text-center">Login</h2>
                 {error && <p className="text-red-500 mb-2">{error}</p>}
                 <form onSubmit={handleSubmit}>
@@ -112,7 +112,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                     className="mt-4 text-blue-500 underline text-right">
                     Don't have an account? Sign Up
                 </button>
-                {/* Register Modal */}
                 <RegisterModal isOpen={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />
             </div>
             <ToastContainer />
