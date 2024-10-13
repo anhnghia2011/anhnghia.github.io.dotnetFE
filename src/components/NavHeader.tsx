@@ -1,18 +1,17 @@
-import { useState, useEffect } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
+import { useNavigate } from 'react-router-dom';
 import logo from '../assets/nikelogo.png';
 import LoginModal from '../components/LoginModal';
-import { useNavigate } from 'react-router-dom';
 
 function NavHeader() {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const [isLoggedIn, setIsLoggedIn] = useState(false); 
     const [lastName, setLastName] = useState(''); 
-
     
     const handclickhome = () => {
         navigate('/');
@@ -27,6 +26,19 @@ function NavHeader() {
         }
     }, []);
 
+    // Function to handle login success
+    interface User {
+        lastName: string;
+        // Add other properties if needed
+    }
+
+    const handleLoginSuccess = (user: User) => {
+        localStorage.setItem('user', JSON.stringify(user));
+        setIsLoggedIn(true);
+        setLastName(user.lastName);
+        setIsModalOpen(false); 
+    };
+
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
@@ -36,7 +48,7 @@ function NavHeader() {
         localStorage.removeItem('token');
         setIsLoggedIn(false);
         window.location.reload();
-        };
+    };
 
     return (
         <div className='w-full'>
@@ -64,34 +76,36 @@ function NavHeader() {
                        <FavoriteBorderIcon />
                        <div className="relative group">
                            <button 
-                               className='flex items-center rounded-2xl bg-red-200 px-2 py-1 shadow-lg'>
+                               className='flex items-center rounded-2xl bg-red-200 px-2 py-1 shadow-lg'
+                               onClick={() => !isLoggedIn && setIsModalOpen(true)} // Open modal on login button click
+                           >
                                {isLoggedIn ? (
-                            <>
-                                   <span>{lastName}</span> 
-                                   <AccountCircleIcon style={{ marginLeft: '8px' }} />
-                               </>
-                           ) : (
-                               <>
-                                   <AccountCircleIcon style={{ marginRight: '8px' }} />
-                                   <span>Login</span>
-                               </>
-                           )}
-                          </button>
+                                   <>
+                                       <span>{lastName}</span> 
+                                       <AccountCircleIcon style={{ marginLeft: '8px' }} />
+                                   </>
+                               ) : (
+                                   <>
+                                       <AccountCircleIcon style={{ marginRight: '8px' }} />
+                                       <span>Login</span>
+                                   </>
+                               )}
+                           </button>
 
-                                {isLoggedIn && (
-                                    <div 
-                               className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                               <a href="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">
-                                   Profile
-                               </a>
-                               <button 
-                                   className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-200"
-                                   onClick={handleLogout}
-                               >
-                                   Logout
-                               </button>
-                          </div>
-                         )}
+                           {isLoggedIn && (
+                               <div 
+                                   className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                   <a href="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-200">
+                                       Profile
+                                   </a>
+                                   <button 
+                                       className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-200"
+                                       onClick={handleLogout}
+                                   >
+                                       Logout
+                                   </button>
+                               </div>
+                           )}
                        </div>
                   </div>
                 </div>
@@ -109,7 +123,11 @@ function NavHeader() {
                     />
                 </div>
             </div>
-            <LoginModal isOpen={isModalOpen} onClose={handleCloseModal} />
+            <LoginModal 
+                isOpen={isModalOpen} 
+                onClose={handleCloseModal}
+                onLoginSuccess={handleLoginSuccess}
+            />
         </div>
     );
 }
