@@ -84,7 +84,17 @@ function Shoprun() {
     });
 
     return (
-        <div className="max-w-[1440px] mx-auto flex p-10 gap-5 min-h-1000">
+        <div className="max-w-[1440px] mx-auto flex flex-col p-10 gap-5">
+            <div className="basket flex gap-4 px-36">
+                    <div className="w-full">
+                        <img
+                            src="https://static.nike.com/a/images/w_1920,c_limit/12a12a7a-dd76-4ac6-8763-cb681339e7bb/check-out-the-5-best-nike-sneakers-for-dance.jpg"
+                            alt="Large Basketball Shoe"
+                            className="w-auto h-96 mx-auto"
+                        />
+                    </div>
+                </div>
+        <div className="max-w-[1440px] mx-auto flex pt-5 gap-5">
             <div className="flex flex-col gap-2 w-1/5">
                 <h2 className="text-xl font-semibold">Categories</h2>
                 <div className="flex flex-col">
@@ -172,7 +182,8 @@ function Shoprun() {
                     ))}
                 </div>
             </div>
-        </div>
+            </div>
+            </div>
     );
 }
 

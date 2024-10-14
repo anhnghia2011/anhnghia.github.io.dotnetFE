@@ -29,7 +29,6 @@ function NavHeader() {
     // Function to handle login success
     interface User {
         lastName: string;
-        // Add other properties if needed
     }
 
     const handleLoginSuccess = (user: User) => {
@@ -77,7 +76,7 @@ function NavHeader() {
                        <div className="relative group">
                            <button 
                                className='flex items-center rounded-2xl bg-red-200 px-2 py-1 shadow-lg'
-                               onClick={() => !isLoggedIn && setIsModalOpen(true)} // Open modal on login button click
+                               onClick={() => !isLoggedIn && setIsModalOpen(true)} 
                            >
                                {isLoggedIn ? (
                                    <>
@@ -109,6 +108,8 @@ function NavHeader() {
                        </div>
                   </div>
                 </div>
+
+                {/* Video Section */}
                 <div className='w-full pb-4'>
                     <ReactPlayer
                         url="https://vimeo.com/1013189953"
@@ -122,12 +123,14 @@ function NavHeader() {
                         className='object-cover shop-video'
                     />
                 </div>
+
+                {/* Login Modal */}
+                <LoginModal 
+                    isOpen={isModalOpen} 
+                    onClose={handleCloseModal}
+                    onLoginSuccess={handleLoginSuccess}
+                />
             </div>
-            <LoginModal 
-                isOpen={isModalOpen} 
-                onClose={handleCloseModal}
-                onLoginSuccess={handleLoginSuccess}
-            />
         </div>
     );
 }

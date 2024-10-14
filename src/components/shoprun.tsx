@@ -86,7 +86,17 @@ function Shoprun() {
     });
 
     return (
-        <div className='max-w-[1440px] mx-auto flex p-10 gap-5 min-h-1000'>
+        <div className='max-w-[1440px] mx-auto flex flex-col p-10 gap-5 min-h-1000'>
+             <div className="basket flex gap-4 px-36">
+                    <div className="w-full h-auto">
+                        <img
+                            src="https://cdn.shopify.com/s/files/1/0456/5070/6581/files/Nike_PEGASUS_41_1960x740_05d0c876-e186-4437-9584-621322960b24.jpg?v=1727844554&width=1800"
+                            alt="Large Basketball Shoe"
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                </div>
+        <div className='max-w-[1440px] mx-auto flex pt-5 gap-5 min-h-1000'>
          <div className='flex flex-col gap-2 w-1/5'>
                <h2 className='text-xl font-semibold'>Categories</h2>
                <div className='flex flex-col'>
@@ -176,6 +186,7 @@ function Shoprun() {
                     ))}
                 </div>
             </div>
+        </div>
         </div>
     );
 }

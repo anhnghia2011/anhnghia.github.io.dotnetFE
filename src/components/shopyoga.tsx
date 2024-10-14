@@ -86,6 +86,16 @@ function Shoprun() {
     });
 
     return (
+        <div className="max-w-[1440px] mx-auto flex flex-col p-10 gap-5">
+        <div className="basket flex gap-4 px-36">
+                <div className="w-full">
+                    <img
+                        src="https://static.nike.com/a/images/w_1920,c_limit/ae06cfe1-c675-4e99-b957-f0f1571c7141/what-to-wear-to-yoga-class-5-outfit-ideas-by-nike.jpg"
+                        alt="Large Basketball Shoe"
+                        className="w-auto h-96 mx-auto"
+                    />
+                </div>
+            </div>
         <div className='max-w-[1440px] mx-auto flex p-10 gap-5 min-h-1000'>
        <div className='flex flex-col gap-2 w-1/5'>
                <h2 className='text-xl font-semibold'>Categories</h2>
@@ -175,6 +185,7 @@ function Shoprun() {
                         </div>
                     ))}
                 </div>
+            </div>
             </div>
         </div>
     );

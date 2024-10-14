@@ -89,7 +89,17 @@ function Shoprun() {
         : sortedProducts;
 
     return (
-        <div className='max-w-[1440px] mx-auto flex p-10 gap-5 min-h-1000'>
+        <div className='max-w-[1440px] mx-auto flex flex-col p-10 gap-5 min-h-1000'>
+             <div className="basket flex gap-4 px-36">
+                    <div className="w-full h-500">
+                        <img
+                            src="https://th.bing.com/th/id/OIP.7ai7yFjxmchd0LTaS43fUgHaE8?w=286&h=191&c=7&r=0&o=5&pid=1.7"
+                            alt="Large Basketball Shoe"
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                </div>
+        <div className='max-w-[1440px] mx-auto flex pt-5 gap-5 min-h-1000'>
             <div className='flex flex-col gap-2 w-1/5'>
                 <h2 className='text-xl font-semibold'>Categories</h2>
                 <div className='flex flex-col'>
@@ -183,6 +193,7 @@ function Shoprun() {
                     ))}
                 </div>
             </div>
+        </div>
         </div>
     );
 }
