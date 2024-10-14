@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { Alert, Select, Spin } from 'antd';
 import axios from 'axios';
-import { Select, Spin, Alert } from 'antd';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Shoprun() {
@@ -8,22 +8,22 @@ function Shoprun() {
 
     const handleClickRun = () => {
         navigate(`/run-shoe`);
-    }
+    };
     const handleClickSoccer = () => {
         navigate(`/soccer-shoe`);
-    }
+    };
     const handleClickBasketball = () => {
         navigate(`/basketball-shoe`);
-    }
+    };
     const handleClickGym = () => {
         navigate(`/gym-shoe`);
-    }
+    };
     const handleClickDance = () => {
         navigate(`/dance-shoe`);
-    }
+    };
     const handleClickYoga = () => {
         navigate(`/yoga-shoe`);
-    }
+    };
 
     interface Product {
         id: number;
@@ -62,16 +62,19 @@ function Shoprun() {
     };
 
     const handleGenderChange = (gender: string) => {
-        setSelectedGenders(prev => {
+        setSelectedGenders((prev) => {
             if (prev.includes(gender)) {
-                return prev.filter(g => g !== gender); // Uncheck
-            } else {
-                return [...prev, gender]; // Check
+                return prev.filter((g) => g !== gender); // Remove gender if already selected
             }
+            return [...prev, gender]; // Add gender if not selected
         });
     };
 
-    const sortedProducts = [...products].sort((a, b) => {
+    const filteredProducts = products.filter((product) =>
+        selectedGenders.length === 0 || selectedGenders.includes(product.gender)
+    );
+
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
         if (sortOrder === 'price') {
             return a.price - b.price;
         } else if (sortOrder === 'name') {
@@ -80,83 +83,85 @@ function Shoprun() {
         return 0;
     });
 
-    // Filter products based on selected gender
-    const filteredProducts = sortedProducts.filter(product => {
-        return selectedGenders.length === 0 || selectedGenders.includes(product.gender);
-    });
-
     return (
-        <div className='max-w-[1440px] mx-auto flex flex-col p-10 gap-5 min-h-1000'>
-             <div className="basket flex gap-4 px-36">
-                    <div className="w-full h-auto">
+        <div className="max-w-[1440px] mx-auto flex flex-col p-10 gap-5">
+            <div className="flex gap-4">
+                    <div className="w-full flex pl-20">
                         <img
-                            src="https://cdn.shopify.com/s/files/1/0456/5070/6581/files/Nike_PEGASUS_41_1960x740_05d0c876-e186-4437-9584-621322960b24.jpg?v=1727844554&width=1800"
+                            src="https://static.nike.com/a/images/w_1920,c_limit/9e04e5a1-b741-4f3d-b557-8027c586a62d/how-long-should-it-take-to-walk-a-mile.jpg"
                             alt="Large Basketball Shoe"
-                            className="w-full h-full object-cover"
+                            className="w-auto h-96"
+                        />
+                        <img
+                            src="https://static.nike.com/a/images/w_1920,c_limit/ebb9ccf9-fd9d-4d75-9862-3d3491fc2b15/best-gym-backpacks-by-nike.jpg"
+                            alt="Large Basketball Shoe"
+                            className="w-auto h-96"
                         />
                     </div>
                 </div>
-        <div className='max-w-[1440px] mx-auto flex pt-5 gap-5 min-h-1000'>
-         <div className='flex flex-col gap-2 w-1/5'>
-               <h2 className='text-xl font-semibold'>Categories</h2>
-               <div className='flex flex-col'>
-                 <label className='flex items-center cursor-pointer mb-3 px-3 py-2 bg-gray-100 text-black w-36' onClick={handleClickRun}>
-                     Running Shoes
-                 </label>
-                 <label className='flex items-center cursor-pointer mb-3' onClick={handleClickGym}>
-                     Gym
-                 </label>
-                 <label className='flex items-center cursor-pointer mb-3' onClick={handleClickBasketball}>
-                     Basketball
-                 </label>
-                 <label className='flex items-center cursor-pointer mb-3' onClick={handleClickDance}>
-                     Dance
-                 </label>
-                 <label className='flex items-center cursor-pointer mb-3' onClick={handleClickSoccer}>
-                     Soccer
-                 </label>
-                 <label className='flex items-center cursor-pointer mb-3' onClick={handleClickYoga}>
-                     Yoga
-                 </label>
-               </div>
-                <h2 className='text-xl font-semibold mt-4'>Filter by</h2>
-                <div className='flex flex-col'>
-                  <label className='flex items-center cursor-pointer mb-3'>
-                      <input 
-                          type='checkbox' 
-                          className='mr-2' 
-                          checked={selectedGenders.includes('Male')} 
-                          onChange={() => handleGenderChange('Male')} 
-                      />
-                      Male
-                  </label>
-                  <label className='flex items-center cursor-pointer mb-3'>
-                      <input 
-                          type='checkbox' 
-                          className='mr-2' 
-                          checked={selectedGenders.includes('Female')} 
-                          onChange={() => handleGenderChange('Female')} 
-                      />
-                      Female
-                  </label>
-                  <label className='flex items-center cursor-pointer mb-3'>
-                      <input 
-                          type='checkbox' 
-                          className='mr-2' 
-                          checked={selectedGenders.includes('Kid')} 
-                          onChange={() => handleGenderChange('Kid')} 
-                      />
-                      Kid
-                  </label>
+        <div className="flex p-10 gap-5">
+            <div className="flex flex-col gap-2 w-1/5">
+                <h2 className="text-xl font-semibold">Categories</h2>
+                <div className="flex flex-col">
+                    <label className="flex items-center cursor-pointer mb-3 px-3 py-2 bg-gray-100 text-black w-36" onClick={handleClickRun}>
+                        Running
+                    </label>
+                    <label className="flex items-center cursor-pointer mb-3" onClick={handleClickGym}>
+                        Gym
+                    </label>
+                    <label className="flex items-center cursor-pointer mb-3" onClick={handleClickBasketball}>
+                        Basketball
+                    </label>
+                    <label className="flex items-center cursor-pointer mb-3" onClick={handleClickDance}>
+                        Dance
+                    </label>
+                    <label className="flex items-center cursor-pointer mb-3" onClick={handleClickSoccer}>
+                        Soccer
+                    </label>
+                    <label className="flex items-center cursor-pointer mb-3" onClick={handleClickYoga}>
+                        Yoga
+                    </label>
+                </div>
+
+                <h2 className="text-xl font-semibold mt-4">Filter by</h2>
+                <div className="flex flex-col">
+                    <label className="flex items-center cursor-pointer mb-3">
+                        <input
+                            type="checkbox"
+                            className="mr-2"
+                            checked={selectedGenders.includes('Male')}
+                            onChange={() => handleGenderChange('Male')}
+                        />
+                        Male
+                    </label>
+                    <label className="flex items-center cursor-pointer mb-3">
+                        <input
+                            type="checkbox"
+                            className="mr-2"
+                            checked={selectedGenders.includes('Female')}
+                            onChange={() => handleGenderChange('Female')}
+                        />
+                        Female
+                    </label>
+                    <label className="flex items-center cursor-pointer mb-3">
+                        <input
+                            type="checkbox"
+                            className="mr-2"
+                            checked={selectedGenders.includes('Kid')}
+                            onChange={() => handleGenderChange('Kid')}
+                        />
+                        Kid
+                    </label>
                 </div>
             </div>
-            <div className='w-4/5 flex flex-col'>
-                <div className='flex justify-between p-4 mb-3 border rounded-xl'>
-                    <h2 className='text-2xl font-semibold'>Running Shoes</h2>
-                    <div className='flex gap-2'>
-                        <Select 
-                            className='text-white' 
-                            defaultValue={sortOrder} 
+
+            <div className="w-4/5 flex flex-col">
+                <div className="flex justify-between p-4 mb-3 border rounded-xl">
+                    <h2 className="text-2xl font-semibold">Running Shoes</h2>
+                    <div className="flex gap-2">
+                        <Select
+                            className="text-white"
+                            defaultValue={sortOrder}
                             onChange={handleSortChange}
                             options={[
                                 { label: 'Sort by Price', value: 'price' },
@@ -168,15 +173,11 @@ function Shoprun() {
                 {loading && <Spin size="large" />}
                 {error && <Alert message={error} type="error" />}
                 <div className="product-list grid grid-cols-1 md:grid-cols-3 gap-4 rounded-xl min-h-500">
-                    {filteredProducts.map(product => (
+                    {sortedProducts.map((product) => (
                         <div key={product.id} className="product-card border rounded-lg shadow-md p-4">
-                            <img 
-                                src={product.imageUrl} 
-                                alt={product.name} 
-                                className="w-full h-48 object-cover mb-4" 
-                            />
+                            <img src={product.imageUrl} alt={product.name} className="w-full h-48 object-cover mb-4" />
                             <h2 className="text-xl font-bold">{product.name}</h2>
-                            <p className='text-black font-medium'>{product.gender}'s shoe</p>
+                            <p className="text-black font-medium">{product.gender}'s shoe</p>
                             <p className="text-lg font-semibold mt-2">${product.price.toFixed(2)}</p>
                             {product.discountPrice && (
                                 <p className="text-red-500">Discount: ${product.discountPrice.toFixed(2)}</p>
@@ -186,8 +187,8 @@ function Shoprun() {
                     ))}
                 </div>
             </div>
-        </div>
-        </div>
+            </div>
+            </div>
     );
 }
 

@@ -1,11 +1,12 @@
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Home from './container/HomePage';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ShopMale from './container/Malepage';
+import ShopBasketball from './container/ShopBasketball';
+import ShopDance from './container/ShopDance';
+import ShopGym from './container/ShopGym';
 import ShopRun from './container/ShopRun';
 import ShopSoccer from './container/ShopSoccer';
-import ShopGym from './container/ShopGym';
 import ShopYoga from './container/ShopYoga';
-import ShopDance from './container/ShopDance';
-import ShopBasketball from './container/ShopBasketball';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
                 <Route path="yoga-shoe" element={<ShopYoga />} /> 
                 <Route path="dance-shoe" element={<ShopDance />} />
                 <Route path="basketball-shoe" element={<ShopBasketball />} />
+                <Route path="male-page" element={<ShopMale />} />
             </Routes>
         </Router>
   );

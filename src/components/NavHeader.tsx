@@ -16,6 +16,9 @@ function NavHeader() {
     const handclickhome = () => {
         navigate('/');
     }
+    const handleMale =() =>{
+        navigate('/male-page')
+    }
 
     useEffect(() => {
         const userDataString = localStorage.getItem('user');
@@ -64,7 +67,7 @@ function NavHeader() {
                     <div className='w-6/12'>
                         <ul className='flex justify-around'>
                             <li>New & Featured</li>
-                            <li>Men</li>
+                            <li className='cursor-pointer' onClick={handleMale}>Men</li>
                             <li>Women</li>
                             <li>Kids</li>
                             <li>Sale</li>
@@ -109,7 +112,6 @@ function NavHeader() {
                   </div>
                 </div>
 
-                {/* Video Section */}
                 <div className='w-full pb-4'>
                     <ReactPlayer
                         url="https://vimeo.com/1013189953"
@@ -124,7 +126,6 @@ function NavHeader() {
                     />
                 </div>
 
-                {/* Login Modal */}
                 <LoginModal 
                     isOpen={isModalOpen} 
                     onClose={handleCloseModal}

@@ -45,7 +45,7 @@ function Shoprun() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:5099/api/Products/category/3');
+                const response = await axios.get('http://localhost:5099/api/Products/gender/Male');
                 setProducts(response.data);
             } catch {
                 setError('Failed to fetch products.');
@@ -90,12 +90,12 @@ function Shoprun() {
         <div className="flex gap-4">
                 <div className="w-full flex pl-20">
                     <img
-                        src="https://static.nike.com/a/images/w_1920,c_limit/7d7c9bf9-1717-458f-8ebe-3b7297c5ae9f/the-best-nike-basketball-shorts-for-kids.jpg"
+                        src="https://static.nike.com/a/images/w_1920,c_limit/86de38d3-34ff-47c8-97ec-4284cb4cf251/6-hip-hop-dance-outfits-that-celebrate-music-and-movement.jpg"
                         alt="Large Basketball Shoe"
                         className="w-auto h-96"
                     />
                      <img
-                            src="https://static.nike.com/a/images/w_1920,c_limit/c31bdcf5-feb7-405f-ad8b-4b2126a9cfb4/the-most-comfortable-basketball-shoes-by-nike.jpg"
+                            src="https://static.nike.com/a/images/w_1920,c_limit/12a12a7a-dd76-4ac6-8763-cb681339e7bb/check-out-the-5-best-nike-sneakers-for-dance.jpg"
                             alt="Large Basketball Shoe"
                             className="w-auto h-96"
                         />
@@ -105,16 +105,16 @@ function Shoprun() {
            <div className='flex flex-col gap-2 w-1/5'>
                <h2 className='text-xl font-semibold'>Categories</h2>
                <div className='flex flex-col'>
-                 <label className='flex items-center cursor-pointer mb-3' onClick={handleClickRun}>
+                 <label className='flex items-center cursor-pointer mb-3 ' onClick={handleClickRun}>
                      Running
                  </label>
-                 <label className='flex items-center cursor-pointer mb-3 ' onClick={handleClickGym}>
+                 <label className='flex items-center cursor-pointer mb-3' onClick={handleClickGym}>
                      Gym
                  </label>
-                 <label className='flex items-center cursor-pointer mb-3 px-3 py-2 bg-gray-100 text-black w-36' onClick={handleClickBasketball}>
+                 <label className='flex items-center cursor-pointer mb-3' onClick={handleClickBasketball}>
                      Basketball
                  </label>
-                 <label className='flex items-center cursor-pointer mb-3' onClick={handleClickDance}>
+                 <label className='flex items-center cursor-pointer mb-3 px-3 py-2 bg-gray-100 text-black w-36' onClick={handleClickDance}>
                      Dance
                  </label>
                  <label className='flex items-center cursor-pointer mb-3' onClick={handleClickSoccer}>
@@ -157,7 +157,7 @@ function Shoprun() {
             </div>
             <div className='w-4/5 flex flex-col'>
                 <div className='flex justify-between p-4 mb-3 border rounded-xl'>
-                    <h2 className='text-2xl font-semibold'>Soccer Shoes</h2>
+                    <h2 className='text-2xl font-semibold'>Men's Shoes</h2>
                     <div className='flex gap-2'>
                         <Select 
                             className='text-white' 

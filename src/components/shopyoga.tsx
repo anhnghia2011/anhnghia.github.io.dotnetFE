@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { Alert, Select, Spin } from 'antd';
 import axios from 'axios';
-import { Select, Spin, Alert } from 'antd';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Shoprun() {
@@ -87,21 +87,26 @@ function Shoprun() {
 
     return (
         <div className="max-w-[1440px] mx-auto flex flex-col p-10 gap-5">
-        <div className="basket flex gap-4 px-36">
-                <div className="w-full">
+        <div className="flex gap-4">
+                <div className="w-full flex pl-20">
                     <img
                         src="https://static.nike.com/a/images/w_1920,c_limit/ae06cfe1-c675-4e99-b957-f0f1571c7141/what-to-wear-to-yoga-class-5-outfit-ideas-by-nike.jpg"
                         alt="Large Basketball Shoe"
-                        className="w-auto h-96 mx-auto"
+                        className="w-auto h-96"
                     />
+                     <img
+                            src="https://static.nike.com/a/images/t_prod/w_1920,c_limit/21e6fa52-b830-4b07-89b8-53440543428e/best-clothing-for-hot-yoga-by-nike.jpg"
+                            alt="Large Basketball Shoe"
+                            className="w-auto h-96"
+                        />
                 </div>
             </div>
-        <div className='max-w-[1440px] mx-auto flex p-10 gap-5 min-h-1000'>
+        <div className='flex p-10 gap-5'>
        <div className='flex flex-col gap-2 w-1/5'>
                <h2 className='text-xl font-semibold'>Categories</h2>
                <div className='flex flex-col'>
                  <label className='flex items-center cursor-pointer mb-3 ' onClick={handleClickRun}>
-                     Running Shoes
+                     Running
                  </label>
                  <label className='flex items-center cursor-pointer mb-3' onClick={handleClickGym}>
                      Gym
