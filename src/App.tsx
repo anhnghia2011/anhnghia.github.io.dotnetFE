@@ -7,6 +7,7 @@ import ShopGym from './container/ShopGym';
 import ShopRun from './container/ShopRun';
 import ShopSoccer from './container/ShopSoccer';
 import ShopYoga from './container/ShopYoga';
+import ProductList from './components/ProductDetail';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                 <Route path="dance-shoe" element={<ShopDance />} />
                 <Route path="basketball-shoe" element={<ShopBasketball />} />
                 <Route path="male-page" element={<ShopMale />} />
+                <Route path="/products/id" element={<ProductList />} />
             </Routes>
         </Router>
   );

@@ -12,12 +12,14 @@ function NavHeader() {
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const [isLoggedIn, setIsLoggedIn] = useState(false); 
     const [lastName, setLastName] = useState(''); 
-    
+    const [cartItems, setCartItems] = useState(0); // State for cart item count
+
     const handclickhome = () => {
         navigate('/');
     }
-    const handleMale =() =>{
-        navigate('/male-page')
+
+    const handleMale = () => {
+        navigate('/male-page');
     }
 
     useEffect(() => {
@@ -27,14 +29,13 @@ function NavHeader() {
             setIsLoggedIn(true); 
             setLastName(userData.lastName); 
         }
+
+        // Get cart items from localStorage (or any cart management logic)
+        const storedCartItems = localStorage.getItem('cartItems');
+        setCartItems(storedCartItems ? JSON.parse(storedCartItems).length : 0);
     }, []);
 
-    // Function to handle login success
-    interface User {
-        lastName: string;
-    }
-
-    const handleLoginSuccess = (user: User) => {
+    const handleLoginSuccess = (user) => {
         localStorage.setItem('user', JSON.stringify(user));
         setIsLoggedIn(true);
         setLastName(user.lastName);
@@ -74,9 +75,16 @@ function NavHeader() {
                         </ul>
                     </div>
                     <div className='w-1/5 flex justify-between items-center gap-4'>
-                       <ShoppingBagIcon />
-                       <FavoriteBorderIcon />
-                       <div className="relative group">
+                        <div className='relative'>
+                            <ShoppingBagIcon />
+                            {cartItems > 0 && (
+                                <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex justify-center items-center">
+                                    {cartItems}
+                                </span>
+                            )}
+                        </div>
+                        <FavoriteBorderIcon />
+                        <div className="relative group">
                            <button 
                                className='flex items-center rounded-2xl bg-red-200 px-2 py-1 shadow-lg'
                                onClick={() => !isLoggedIn && setIsModalOpen(true)} 
