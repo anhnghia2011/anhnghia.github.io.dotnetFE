@@ -12,11 +12,15 @@ function NavHeader() {
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const [isLoggedIn, setIsLoggedIn] = useState(false); 
     const [lastName, setLastName] = useState(''); 
-    const [cartItems, setCartItems] = useState(0); // State for cart item count
-
+    const [cartItems, setCartItems] = useState(0);
+ 
     const handclickhome = () => {
         navigate('/');
     }
+
+    const handleFavoriteClick = () => {
+        navigate('/favorites');
+    };
 
     const handleMale = () => {
         navigate('/male-page');
@@ -35,7 +39,7 @@ function NavHeader() {
         setCartItems(storedCartItems ? JSON.parse(storedCartItems).length : 0);
     }, []);
 
-    const handleLoginSuccess = (user) => {
+    const handleLoginSuccess = (user: { lastName: string }) => {
         localStorage.setItem('user', JSON.stringify(user));
         setIsLoggedIn(true);
         setLastName(user.lastName);
@@ -76,14 +80,14 @@ function NavHeader() {
                     </div>
                     <div className='w-1/5 flex justify-between items-center gap-4'>
                         <div className='relative'>
-                            <ShoppingBagIcon />
+                            <ShoppingBagIcon className='cursor-pointer'/>
                             {cartItems > 0 && (
                                 <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex justify-center items-center">
                                     {cartItems}
                                 </span>
                             )}
                         </div>
-                        <FavoriteBorderIcon />
+                        <FavoriteBorderIcon onClick={handleFavoriteClick} className='cursor-pointer'/>
                         <div className="relative group">
                            <button 
                                className='flex items-center rounded-2xl bg-red-200 px-2 py-1 shadow-lg'

@@ -1,38 +1,172 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Spin, Alert, message } from 'antd';
+import Footer from './Footer';
+import NavHeader from './NavHeader';
+
+interface Product {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    discountPrice?: number;
+    imageUrl: string;
+    isNew?: boolean;
+    gender: string;
+}
 
 function ProductDetail() {
-    const { id } = useParams(); // Lấy ID từ URL
-    const [product, setProduct] = useState(null);
+    const { id } = useParams<{ id: string }>();
+    const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
+    const [quantity, setQuantity] = useState(1);
+    const [size, setSize] = useState<number | null>(null);
 
     useEffect(() => {
-        const fetchProduct = async () => {
+        const fetchProductDetails = async () => {
             try {
                 const response = await axios.get(`http://localhost:5099/api/Products/${id}`);
-                setProduct(response.data.data);
-            } catch (err) {
+                setProduct(response.data);
+            } catch {
                 setError('Failed to fetch product details.');
             } finally {
                 setLoading(false);
             }
         };
-
-        fetchProduct();
+        fetchProductDetails();
     }, [id]);
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
+    const handleQuantityChange = (action: string) => {
+        if (action === 'increase') {
+            setQuantity(prev => prev + 1);
+        } else if (action === 'decrease' && quantity > 1) {
+            setQuantity(prev => prev - 1);
+        }
+    };
+
+    const handleSizeSelection = (selectedSize: number) => {
+        setSize(selectedSize);
+    };
+
+    const availableSizes = () => {
+        if (product?.gender === 'Men') {
+            return [40, 41, 42, 43, 44, 45];
+        } else if (product?.gender === 'Women') {
+            return [35, 36, 37, 38, 39, 40];
+        } else {
+            return [10, 11, 12, 13, 14, 15]; 
+        }
+    };
+
+    const handleBuyClick = () => {
+        if (!size) {
+            message.error('Please select a size');
+            return;
+        }
+
+        if (!product) {
+            message.error('Product details are not available.');
+            return;
+        }
+
+        const orderInfo = {
+            productId: product.id,
+            imgUrl: product.imageUrl,
+            quantity,
+            size,
+            unitPrice: product.discountPrice ? product.discountPrice : product.price,
+            totalAmount: product.discountPrice ? product.discountPrice * quantity : product.price * quantity,
+        };
+
+        // Save order information to localStorage
+        localStorage.setItem('orderInfo', JSON.stringify(orderInfo));
+
+        // Redirect to the BuyPage
+        window.location.href = '/buy'; // Change this to your actual Buy page route
+    };
+
+    if (loading) {
+        return <Spin size="large" />;
+    }
+
+    if (error) {
+        return <Alert message={error} type="error" />;
+    }
+
+    if (!product) {
+        return <Alert message="Product not found." type="error" />;
+    }
 
     return (
-        <div>
-            <h1>{product?.name}</h1>
-            <p>{product?.description}</p>
-            <img src={product?.imageUrl} alt={product?.name} />
-            <p>Price: ${product?.price}</p>
-            {/* Hiển thị thêm thông tin sản phẩm */}
+        <div className='shop'>
+            <NavHeader />
+            <div className="py-10 px-44 flex gap-10">
+                <div className="flex-shrink-0">
+                    <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="w-96 h-96 object-cover rounded-lg"
+                    />
+                </div>
+
+                <div className="flex flex-col gap-5">
+                    {product.isNew && (
+                        <span className="bg-green-200 text-green-700 px-2 py-1 text-xs font-semibold rounded-lg">
+                            New Arrival
+                        </span>
+                    )}
+                    <h1 className="text-3xl font-bold">{product.name}</h1>
+                    <p>{product.description}</p>
+                    
+                    <div className="flex items-center gap-3">
+                        {product.discountPrice ? (
+                            <>
+                                <span className="line-through text-gray-500">${product.price.toFixed(2)}</span>
+                                <span className="text-red-500 text-2xl">${product.discountPrice.toFixed(2)}</span>
+                            </>
+                        ) : (
+                            <span className="text-2xl">${product.price.toFixed(2)}</span>
+                        )}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <button onClick={() => handleQuantityChange('decrease')} className="px-2 py-1 bg-gray-200 rounded">
+                            -
+                        </button>
+                        <span className="px-4">{quantity}</span>
+                        <button onClick={() => handleQuantityChange('increase')} className="px-2 py-1 bg-gray-200 rounded">
+                            +
+                        </button>
+                    </div>
+
+                    <div className="mt-4">
+                        <h4 className="font-semibold mb-2">Select Size</h4>
+                        <div className="flex gap-3">
+                            {availableSizes().map(sizeOption => (
+                                <button
+                                    key={sizeOption}
+                                    onClick={() => handleSizeSelection(sizeOption)}
+                                    className={`px-3 py-2 border rounded ${size === sizeOption ? 'bg-blue-500 text-white' : 'bg-white text-gray-800'}`}
+                                >
+                                    {sizeOption}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="mt-6">
+                        <button
+                            onClick={handleBuyClick}
+                            className="px-6 py-3 bg-blue-500 text-white rounded-lg text-lg"
+                        >
+                            Buy
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <Footer />
         </div>
     );
 }

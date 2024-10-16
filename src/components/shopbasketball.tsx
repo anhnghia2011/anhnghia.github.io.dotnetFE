@@ -73,7 +73,7 @@ function Shoprun() {
 
     const handleProductClick = (productId: number) => {
         navigate(`/product/${productId}`);
-    };
+    };    
 
     const sortedProducts = [...products].sort((a, b) => {
         if (sortOrder === 'price') return a.price - b.price;
@@ -122,7 +122,7 @@ function Shoprun() {
                 </div>
             </div>
             <div className="flex flex-col gap-5">
-                <div className="flex justify-end">
+                <div className="flex justify-end hidden">
                     <Dropdown overlay={cartMenu} trigger={['hover']}>
                         <Badge count={cart.length}>
                             <Button icon={<ShoppingCartOutlined />} />
@@ -190,20 +190,34 @@ function Shoprun() {
                         <div className="product-list grid grid-cols-1 md:grid-cols-3 gap-4 rounded-xl min-h-1/2">
                             {filteredProducts.map(product => (
                                 <div
-                                    key={product.id}
-                                    className="cursor-pointer p-4 border rounded-lg hover:shadow-lg"
-                                    onClick={() => handleProductClick(product.id)}
-                                >
-                                    <img src={product.imageUrl} alt={product.name} className="w-full h-48 object-cover rounded-md" />
-                                    <h3 className="font-semibold text-lg">{product.name}</h3>
-                                    <p className="text-gray-600">${product.price.toFixed(2)}</p>
-                                    <div className="flex justify-between items-center mt-2">
-                                        <Button onClick={() => addToCart(product)}>Add to Cart</Button>
-                                        <span onClick={(e) => { e.stopPropagation(); toggleFavorite(product); }}>
-                                            {favorites.some(fav => fav.id === product.id) ? <HeartFilled style={{ color: 'red' }} /> : <HeartOutlined />}
-                                        </span>
-                                    </div>
+                                key={product.id}
+                                className="cursor-pointer p-4 border rounded-lg hover:shadow-lg relative"
+                                onClick={() => handleProductClick(product.id)}
+                            >
+                                {product.isNew && (
+                                    <span className="absolute top-0 left-0 bg-green-200 text-green-700 px-2 py-1 text-xs font-semibold rounded-br-lg">
+                                        New Arrival
+                                    </span>
+                                )}
+                                <img src={product.imageUrl} alt={product.name} className="w-full h-48 object-cover rounded-md" />
+                                <h3 className="font-semibold text-lg">{product.name}</h3>
+                                <p className="text-gray-600">
+                                  {product.discountPrice ? (
+                                    <>
+                                      <span className="line-through text-gray-400">${product.price.toFixed(2)}</span>
+                                      <span className="ml-2 text-red-500">${product.discountPrice.toFixed(2)}</span>
+                                    </>
+                                  ) : (
+                                    <span>${product.price.toFixed(2)}</span>
+                                  )}
+                                </p>
+                                <div className="flex justify-between items-center mt-2">
+                                    <Button onClick={() => addToCart(product)}>Add to Cart</Button>
+                                    <span onClick={(e) => { e.stopPropagation(); toggleFavorite(product); }}>
+                                        {favorites.some(fav => fav.id === product.id) ? <HeartFilled style={{ color: 'red' }} /> : <HeartOutlined />}
+                                    </span>
                                 </div>
+                            </div>                            
                             ))}
                         </div>
                     </div>
