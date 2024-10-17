@@ -51,9 +51,9 @@ function ProductDetail() {
     };
 
     const availableSizes = () => {
-        if (product?.gender === 'Men') {
+        if (product?.gender === 'Male') {
             return [40, 41, 42, 43, 44, 45];
-        } else if (product?.gender === 'Women') {
+        } else if (product?.gender === 'Female') {
             return [35, 36, 37, 38, 39, 40];
         } else {
             return [10, 11, 12, 13, 14, 15]; 
@@ -72,6 +72,7 @@ function ProductDetail() {
         }
 
         const orderInfo = {
+            name: product.name,
             productId: product.id,
             imgUrl: product.imageUrl,
             quantity,
@@ -79,12 +80,10 @@ function ProductDetail() {
             unitPrice: product.discountPrice ? product.discountPrice : product.price,
             totalAmount: product.discountPrice ? product.discountPrice * quantity : product.price * quantity,
         };
-
-        // Save order information to localStorage
+        
         localStorage.setItem('orderInfo', JSON.stringify(orderInfo));
 
-        // Redirect to the BuyPage
-        window.location.href = '/buy'; // Change this to your actual Buy page route
+        window.location.href = '/buy'; 
     };
 
     if (loading) {
@@ -113,7 +112,7 @@ function ProductDetail() {
 
                 <div className="flex flex-col gap-5">
                     {product.isNew && (
-                        <span className="bg-green-200 text-green-700 px-2 py-1 text-xs font-semibold rounded-lg">
+                        <span className="absolute top-30 left-44 bg-green-200 text-green-700 px-2 py-1 text-xs font-semibold rounded-br-lg">
                             New Arrival
                         </span>
                     )}

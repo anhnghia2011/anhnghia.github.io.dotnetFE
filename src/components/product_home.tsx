@@ -54,7 +54,7 @@ const ProductList: React.FC = () => {
   return (
     <div className='w-full'>
       <div className='max-w-[1440px] mx-auto'>
-        <h1 className='text-start text-2xl font-bold mt-3 pl-5'>Classics Spotlight</h1>
+        <h1 className='text-start text-4xl font-bold mt-10 pl-5'>Classics Spotlight</h1>
         <div className='spotlight'>
         <Slider {...settings}>
           {products.slice(0, 10).map((product) => (

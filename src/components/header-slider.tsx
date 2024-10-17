@@ -6,10 +6,15 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import s6 from "../assets/slide6.jpg";
 import "../style.css";
+import { useNavigate } from 'react-router-dom';
 
 function HeaderSlider() {
+    const navigate = useNavigate();
     const sliderRef = useRef<Slider>(null);
-
+ 
+    const handleRunshop = () => {
+        navigate('/run-shoe');
+    }
     const settings = {
         className: "center",
         centerMode: true,
@@ -37,12 +42,12 @@ function HeaderSlider() {
                 <p className="font-normal font-sans">Nike Running</p>
                 <h1 className="font-bold text-6xl">WINNING ISN’T COMFORTABLE</h1>
                 <p className="font-normal font-sans">If you don't hate running a little, you don't love running enough.</p>
-                <button className="rounded-xl px-3 py-1 bg-black text-white">Shop Running</button>
+                <button className="rounded-xl px-3 py-1 bg-black text-white" onClick={handleRunshop}>Shop Running</button>
             </div>
 
             <div>
                 <div className='flex justify-between px-5'>
-                    <p className='text-4xl'>Featured</p>
+                    <p className='w-1440 text-4xl font-bold px-40'>Featured</p>
                     <div className='flex gap-4'>
                         <div className='p-3 rounded-full border border-gray-300 hover:border-blue-300 text-lg cursor-pointer' onClick={handlePrev} >
                             <NavigateBeforeIcon className='text-5xl rounded-full p-1  transition-all'/>

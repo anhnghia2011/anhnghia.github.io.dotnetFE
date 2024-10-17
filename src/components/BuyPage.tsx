@@ -14,8 +14,9 @@ function BuyPage() {
         imgUrl: string;
         size: number;
         totalAmount: number;
-        unitPrice: number; // Thêm trường unitPrice
+        unitPrice: number;
         imageUrl: string; 
+        name: string;
     }
 
     const [orderInfo, setOrderInfo] = useState<OrderInfo | null>(null);
@@ -62,26 +63,26 @@ function BuyPage() {
     
         // Tạo orderDetails
         const orderDetails = {
-            orderId: 1, // Có thể để 0 nếu chưa có ID
-            customerId: user.id, // Lấy userId từ localStorage
-            orderDate: new Date().toISOString(), // Ngày hiện tại
-            status: "Pending", // Trạng thái của đơn hàng
+            orderId: 1,
+            customerId: user.id, 
+            orderDate: new Date().toISOString(), 
+            status: "Pending", 
             totalAmount: orderInfo.totalAmount ?? 0,
             orderDetails: [
                 {
-                    orderDetailId: 1, // Có thể để 0 nếu chưa có ID
-                    orderId: 1, // Có thể để 0 nếu chưa có ID
+                    orderDetailId: 1,
+                    orderId: 1,
                     productId: orderInfo.productId,
                     quantity: orderInfo.quantity,
-                    unitPrice: unitPrice, // Cung cấp giá đơn vị
-                    totalPrice: orderInfo.totalAmount ?? 0, // Cung cấp thông tin về đơn hàng
-                    order: null // Adding this field might resolve the issue
+                    unitPrice: unitPrice,
+                    totalPrice: orderInfo.totalAmount ?? 0,
+                    order: null 
                 },
             ]
         };
     
-        // Gửi yêu cầu đến API
-        try {
+       
+try {
             const response = await axios.post('http://localhost:5099/api/Orders', orderDetails, {
                 headers: {
                     Authorization: `Bearer ${token}` 
@@ -89,8 +90,8 @@ function BuyPage() {
             });
             message.success('Order placed successfully!');
             console.log('Order response:', response.data);
-            localStorage.removeItem('orderInfo'); // Xóa thông tin sau khi đặt hàng
-            window.location.href = '/'; // Chuyển đến trang chính hoặc trang khác
+            localStorage.removeItem('orderInfo');
+            window.location.href = '/';
         } catch (error) {
             message.error('Failed to place order.');
             console.error('Error placing order:', (error as AxiosError).response?.data);
@@ -100,46 +101,55 @@ function BuyPage() {
     if (!orderInfo) return null;
 
     return (
-        <div className='shop'>
-            <NavHeader />
-            <div className="py-10 px-44">
-                <h1 className="text-2xl font-bold">Order Summary</h1>
-                <div className="flex items-center">
-                    <img src={orderInfo.imgUrl} alt={`Product ${orderInfo.productId}`} className="w-32 h-32 object-cover mr-4" />
+        <div className="shop">
+        <NavHeader />
+        <div className="py-10 px-44">
+            <h1 className="text-3xl font-bold mb-10 text-center">Order Summary</h1>
+            <div className="flex w-full justify-center items-start">
+                {/* Product Summary */}
+                <div className="flex items-center border rounded-3xl shadow-lg p-10 bg-white">
+                    <img src={orderInfo.imgUrl} alt={`Product ${orderInfo.productId}`} className="w-64 h-64 object-cover mr-6" />
                     <div>
-                        <p>Quantity: {orderInfo.quantity}</p>
-                        <p>Size: {orderInfo.size}</p>
-                        <p>Total Amount: ${orderInfo.totalAmount.toFixed(2)}</p>
+                        <h2 className="text-xl font-semibold">{orderInfo.name}</h2>
+                        <p className="text-gray-700">Quantity: {orderInfo.quantity}</p>
+                        <p className="text-gray-700">Size: {orderInfo.size}</p>
+                        <p className="text-gray-700">Price: ${orderInfo.unitPrice.toFixed(2)}</p>
                     </div>
                 </div>
 
-                <h2 className="text-lg mt-5">Shipping Address</h2>
-                <input
-                    type="text"
-                    placeholder="Enter your address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    className="w-full px-3 py-2 border rounded"
-                />
+                {/* Shipping and Payment */}
+                <div className="w-2/5 ml-10">
+                    <h2 className="text-lg font-semibold my-5">Shipping Address</h2>
+                    <input
+                        type="text"
+                        placeholder="Enter your address"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        className="w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                    />
 
-                <h2 className="text-lg mt-5">Payment Method</h2>
-                <Select value={paymentMethod} onChange={(e) => setPaymentMethod(e)}>
-                    <Option value="">Select Payment Method</Option>
-                    <Option value="Credit Card">Credit Card</Option>
-                    <Option value="PayPal">PayPal</Option>
-                </Select>
+                    <h2 className="text-lg font-semibold my-5">Payment Method</h2>
+                    <Select value={paymentMethod} onChange={(value) => setPaymentMethod(value)} className="w-full border rounded-lg">
+                        <Option value="">Select Payment Method</Option>
+                        <Option value="Credit Card">Credit Card</Option>
+                        <Option value="PayPal">PayPal</Option>
+                    </Select>
+                    
+                    <p className="text-lg font-bold mt-5">Total Amount: ${orderInfo.totalAmount.toFixed(2)}</p>
 
-                <div className="mt-6">
-                    <button
-                        onClick={handleBuyNow}
-                        className="px-6 py-3 bg-blue-500 text-white rounded-lg text-lg"
-                    >
-                        Buy Now
-                    </button>
+                    <div className="mt-6">
+                        <button
+                            onClick={handleBuyNow}
+                            className="w-full px-6 py-3 bg-blue-500 text-white rounded-lg text-lg hover:bg-blue-600 transition duration-300"
+                        >
+                            Buy Now
+                        </button>
+                    </div>
                 </div>
             </div>
-            <Footer />
         </div>
+        <Footer />
+    </div>
     );
 }
 

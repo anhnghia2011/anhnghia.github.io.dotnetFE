@@ -1,29 +1,49 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
-import { useNavigate } from 'react-router-dom';
+import LoginModal from './LoginModal';
 import logo from '../assets/nikelogo.png';
-import LoginModal from '../components/LoginModal';
+
+interface User {
+    lastName: string;
+}
 
 function NavHeader() {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const [isLoggedIn, setIsLoggedIn] = useState(false); 
     const [lastName, setLastName] = useState(''); 
-    const [cartItems, setCartItems] = useState(0);
- 
+    const [cartItems, setCartItems] = useState(0); 
+
     const handclickhome = () => {
         navigate('/');
     }
 
     const handleFavoriteClick = () => {
-        navigate('/favorites');
+        navigate('/favorites'); 
     };
 
+    const handleAddToCartClick = () => {
+        navigate('/add-to-cart'); 
+    }
+
     const handleMale = () => {
-        navigate('/male-page');
+        navigate('/male');
+    }
+    const handleFemale = () => {
+        navigate('/female');
+    }
+    const handleKid = () => {
+        navigate('/kid');
+    }
+    const handleNew = () => {
+        navigate('/new-arrival');
+    }
+    const handleSale = () => {
+        navigate('/sale');
     }
 
     useEffect(() => {
@@ -34,12 +54,16 @@ function NavHeader() {
             setLastName(userData.lastName); 
         }
 
-        // Get cart items from localStorage (or any cart management logic)
-        const storedCartItems = localStorage.getItem('cartItems');
-        setCartItems(storedCartItems ? JSON.parse(storedCartItems).length : 0);
+        const storedCartItems = localStorage.getItem('cart');
+        if (storedCartItems) {
+            const parsedCartItems = JSON.parse(storedCartItems);
+            setCartItems(parsedCartItems.length); 
+        } else {
+            setCartItems(0); 
+        }
     }, []);
 
-    const handleLoginSuccess = (user: { lastName: string }) => {
+    const handleLoginSuccess = (user: User) => {
         localStorage.setItem('user', JSON.stringify(user));
         setIsLoggedIn(true);
         setLastName(user.lastName);
@@ -71,18 +95,18 @@ function NavHeader() {
                     </div>
                     <div className='w-6/12'>
                         <ul className='flex justify-around'>
-                            <li>New & Featured</li>
+                            <li className='cursor-pointer' onClick={handleNew}>New & Featured</li>
                             <li className='cursor-pointer' onClick={handleMale}>Men</li>
-                            <li>Women</li>
-                            <li>Kids</li>
-                            <li>Sale</li>
+                            <li className='cursor-pointer' onClick={handleFemale}>Women</li>
+                            <li className='cursor-pointer' onClick={handleKid}>Kids</li>
+                            <li className='cursor-pointer' onClick={handleSale}>Sale</li>
                         </ul>
                     </div>
                     <div className='w-1/5 flex justify-between items-center gap-4'>
                         <div className='relative'>
-                            <ShoppingBagIcon className='cursor-pointer'/>
+                            <ShoppingBagIcon className='cursor-pointer' onClick={handleAddToCartClick} />
                             {cartItems > 0 && (
-                                <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex justify-center items-center">
+                                <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-3 h-3 flex justify-center items-center">
                                     {cartItems}
                                 </span>
                             )}
