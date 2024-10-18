@@ -1,8 +1,8 @@
-import { Alert, Select, Spin, Button, Badge, Dropdown, Menu } from 'antd';
+import { Alert, Select, Spin} from 'antd';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCartOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
+import {  HeartOutlined, HeartFilled } from '@ant-design/icons';
 
 interface Product {
     id: number;
@@ -21,7 +21,6 @@ function Shoprun() {
     const [error, setError] = useState<string | null>(null);
     const [sortOrder, setSortOrder] = useState<string>('price');
     const [selectedGenders, setSelectedGenders] = useState<string[]>([]);
-    const [cart, setCart] = useState<Product[]>([]);
     const [favorites, setFavorites] = useState<Product[]>([]);
 
     useEffect(() => {
@@ -37,23 +36,6 @@ function Shoprun() {
         };
         fetchProducts();
     }, []);
-
-    useEffect(() => {
-        const storedCart = localStorage.getItem('cart');
-        const storedFavorites = localStorage.getItem('favorites');
-        if (storedCart) {
-            setCart(JSON.parse(storedCart));
-        }
-        if (storedFavorites) {
-            setFavorites(JSON.parse(storedFavorites));
-        }
-    }, []);
-
-    const addToCart = (product: Product) => {
-        const newCart = [...cart, product];
-        setCart(newCart);
-        localStorage.setItem('cart', JSON.stringify(newCart));
-    };
 
     const toggleFavorite = (product: Product) => {
         const newFavorites = favorites.some(fav => fav.id === product.id)
@@ -84,26 +66,6 @@ function Shoprun() {
         selectedGenders.length === 0 || selectedGenders.includes(product.gender)
     );
 
-    const cartMenu = (
-        <Menu>
-            {cart.length === 0 ? (
-                <Menu.Item key="empty">Your cart is empty</Menu.Item>
-            ) : (
-                cart.map(item => (
-                    <Menu.Item key={item.id}>
-                        <div className="flex items-center">
-                            <img src={item.imageUrl} alt={item.name} className="w-12 h-12 object-cover mr-2" />
-                            <div>
-                                <h3>{item.name}</h3>
-                                <p>${item.price.toFixed(2)}</p>
-                            </div>
-                        </div>
-                    </Menu.Item>
-                ))
-            )}
-        </Menu>
-    );
-
     return (
         <div className="max-w-[1440px] mx-auto flex flex-col p-10 gap-5">
             <div className="flex gap-4">
@@ -121,13 +83,6 @@ function Shoprun() {
                 </div>
             </div>
             <div className="flex flex-col gap-5">
-                <div className="flex justify-end hidden">
-                    <Dropdown overlay={cartMenu} trigger={['hover']}>
-                        <Badge count={cart.length}>
-                            <Button icon={<ShoppingCartOutlined />} />
-                        </Badge>
-                    </Dropdown>
-                </div>
 
                 <div className="flex p-10 gap-5">
                     <div className="flex flex-col gap-2 w-1/5">
@@ -211,15 +166,7 @@ function Shoprun() {
                                         )}
                                     </p>
                                     <div className="flex justify-between items-center mt-2">
-                                        <Button 
-                                            onClick={(e) => { 
-                                                e.stopPropagation();
-                                                addToCart(product);
-                                                window.location.reload();
-                                            }}
-                                        >
-                                            Add to Cart
-                                        </Button>
+                                      
                                         <span onClick={(e) => { e.stopPropagation(); toggleFavorite(product); }}>
                                             {favorites.some(fav => fav.id === product.id) ? <HeartFilled style={{ color: 'red' }} /> : <HeartOutlined />}
                                         </span>

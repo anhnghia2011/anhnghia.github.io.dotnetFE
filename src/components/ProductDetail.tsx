@@ -29,8 +29,10 @@ function ProductDetail() {
             try {
                 const response = await axios.get(`http://localhost:5099/api/Products/${id}`);
                 setProduct(response.data);
-            } catch {
-                setError('Failed to fetch product details.');
+                localStorage.setItem('product', JSON.stringify(response.data));
+            } catch (error) {
+                console.error(error); // Ghi lại lỗi
+                setError('Không thể lấy thông tin sản phẩm.');
             } finally {
                 setLoading(false);
             }
@@ -60,30 +62,33 @@ function ProductDetail() {
         }
     };
 
-    const handleBuyClick = () => {
+    const handleBuyClick = async () => {
         if (!size) {
-            message.error('Please select a size');
+            message.error('Vui lòng chọn kích thước.');
             return;
         }
 
         if (!product) {
-            message.error('Product details are not available.');
+            message.error('Thông tin sản phẩm không có sẵn.');
             return;
         }
 
         const orderInfo = {
-            name: product.name,
             productId: product.id,
-            imgUrl: product.imageUrl,
             quantity,
             size,
-            unitPrice: product.discountPrice ? product.discountPrice : product.price,
-            totalAmount: product.discountPrice ? product.discountPrice * quantity : product.price * quantity,
         };
-        
-        localStorage.setItem('orderInfo', JSON.stringify(orderInfo));
 
-        window.location.href = '/buy'; 
+        try {
+            const response = await axios.post('http://localhost:5099/api/cart/add', orderInfo);
+            const cartItems = response.data;
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            console.log('Order placed successfully:', response.data);
+            message.success('Đã thêm sản phẩm vào giỏ hàng.');
+        } catch (error) {
+            console.error('Error placing order:', error);
+            message.error('Không thể thêm sản phẩm vào giỏ hàng.');
+        }
     };
 
     if (loading) {
@@ -95,7 +100,7 @@ function ProductDetail() {
     }
 
     if (!product) {
-        return <Alert message="Product not found." type="error" />;
+        return <Alert message="Sản phẩm không tìm thấy." type="error" />;
     }
 
     return (
@@ -113,7 +118,7 @@ function ProductDetail() {
                 <div className="flex flex-col gap-5">
                     {product.isNew && (
                         <span className="absolute top-30 left-44 bg-green-200 text-green-700 px-2 py-1 text-xs font-semibold rounded-br-lg">
-                            New Arrival
+                            Hàng Mới
                         </span>
                     )}
                     <h1 className="text-3xl font-bold">{product.name}</h1>
@@ -141,7 +146,7 @@ function ProductDetail() {
                     </div>
 
                     <div className="mt-4">
-                        <h4 className="font-semibold mb-2">Select Size</h4>
+                        <h4 className="font-semibold mb-2">Chọn Kích Thước</h4>
                         <div className="flex gap-3">
                             {availableSizes().map(sizeOption => (
                                 <button
@@ -160,7 +165,7 @@ function ProductDetail() {
                             onClick={handleBuyClick}
                             className="px-6 py-3 bg-blue-500 text-white rounded-lg text-lg"
                         >
-                            Buy
+                            Mua
                         </button>
                     </div>
                 </div>
