@@ -1,33 +1,77 @@
 import { useState, useEffect } from 'react';
 import NavHeader from './NavHeader';
 import Footer from './Footer';
-import { Select, Button } from 'antd';
+import { Select, Button, Input } from 'antd';
 import axios from 'axios';
 
-interface Product {
-    id: string | number;
-    productId: number; // ID sản phẩm từ API
+const { Option } = Select;
+
+interface CartItem {
+    id: number; // This should be the cart item ID
+    productId: number; // This is the product ID
     quantity: number;
-    size: string; // Change to string for size
-    price: number;  // Add price to Product interface
-    name: string;   // Add name to Product interface
+    size: number;
+    productName: string;
+    productImage: string;
+    unitPrice: number; // Price per unit
+    price: number; // Total price for this cart item (quantity * unitPrice)
+}
+
+interface User {
+    id: number; // Add this line
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
 }
 
 function AddToCartPage() {
-    const [cartItems, setCartItems] = useState<Product[]>([]);
+    const [user, setUser] = useState<User | null>(null);
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [sortOrder, setSortOrder] = useState<string>('price');
 
     // Load cart items from localStorage
     useEffect(() => {
-        const storedCartItems = localStorage.getItem('product');
+        const storedCartItems = localStorage.getItem('cartItems');
         setCartItems(storedCartItems ? JSON.parse(storedCartItems) : []);
     }, []);
 
+    // Fetch user from local storage
+    useEffect(() => {
+        const userData = localStorage.getItem('user');
+        if (!userData) {
+            alert('Please log in to view your cart.');
+            return;
+        }
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+    }, []);
+
+    // Fetch cart items from API
+    useEffect(() => {
+        const fetchCartItems = async () => {
+            try {
+                const response = await axios.get('http://localhost:5099/api/Cart');
+                setCartItems(response.data);
+            } catch (error) {
+                console.error('Error fetching cart items:', error);
+            }
+        };
+        fetchCartItems();
+    }, []);
+
     // Remove item from cart
-    const removeCartItem = (productId: string | number) => {
-        const updatedCart = cartItems.filter(item => item.productId !== productId);
-        setCartItems(updatedCart);
-        localStorage.setItem('product', JSON.stringify(updatedCart));
+    const removeCartItem = async (cartItemId: number) => {
+        try {
+            await axios.delete(`http://localhost:5099/api/Cart/remove/${cartItemId}`, {
+                data: { cartItemId },
+            });
+            const updatedCart = cartItems.filter(item => item.id !== cartItemId);
+            setCartItems(updatedCart);
+            localStorage.setItem('cartItems', JSON.stringify(updatedCart));
+        } catch (error) {
+            console.error('Error removing cart item:', error);
+        }
     };
 
     // Handle sorting
@@ -35,31 +79,118 @@ function AddToCartPage() {
         setSortOrder(value);
         const sortedCartItems = [...cartItems].sort((a, b) => {
             if (value === 'price') {
-                return a.price - b.price; // Sort by price
+                return a.unitPrice - b.unitPrice;
             } else {
-                return a.name.localeCompare(b.name); // Sort by name
+                return a.productName.localeCompare(b.productName);
             }
         });
         setCartItems(sortedCartItems);
     };
 
+    // Calculate total price considering quantity
+    const calculateTotal = () => {
+        return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
+    };
+
+   // Increase quantity
+// Increase quantity
+const increaseQuantity = async (cartItemId: number) => {
+    const updatedCart = cartItems.map(item => 
+        item.id === cartItemId ? { ...item, quantity: item.quantity + 1 } : item
+    );
+
+    setCartItems(updatedCart);
+    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
+
+    // Update quantity in the backend
+    const updatedItem = updatedCart.find(item => item.id === cartItemId);
+    if (updatedItem) {
+        try {
+            await axios.put(`http://localhost:5099/api/Cart/update/${cartItemId}`, {
+                quantity: updatedItem.quantity,
+            });
+        } catch (error) {
+            console.error('Error updating quantity in cart:', error);
+        }
+    }
+};
+
+// Decrease quantity
+const decreaseQuantity = async (cartItemId: number) => {
+    const updatedCart = cartItems.map(item => {
+        if (item.id === cartItemId) {
+            if (item.quantity > 1) {
+                return { ...item, quantity: item.quantity - 1 };
+            } else {
+                removeCartItem(cartItemId);
+                return null; // Return null to filter it out later
+            }
+        }
+        return item;
+    }).filter(item => item !== null); // Filter out null items
+
+    setCartItems(updatedCart);
+    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
+
+    // Update quantity in the backend
+    const currentItem = updatedCart.find(item => item.id === cartItemId);
+    if (currentItem) {
+        try {
+            await axios.put(`http://localhost:5099/api/Cart/update/${cartItemId}`, {
+                quantity: currentItem.quantity,
+            });
+        } catch (error) {
+            console.error('Error updating quantity in cart:', error);
+        }
+    }
+};
+
     // Buy all items in the cart
     const handleBuy = async () => {
+        if (cartItems.length === 0) {
+            alert('Not ffound Products in Cart');
+            return;
+        }
+    
         try {
-            const response = await axios.post('http://localhost:5099/api/Order', {
-                items: cartItems,
+            await axios.post('http://localhost:5099/api/Order', 
+            {
+                customerId: user ? user.id : null, 
+                cartItems: cartItems.map(item => ({
+                    productId: item.productId,       
+                    quantity: item.quantity,         
+                    size: item.size,                 
+                    productName: item.productName,   
+                    productImage: item.productImage, 
+                    price: item.price                 
+                })),  
+                totalAmount: calculateTotal() 
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json' 
+                }
             });
-            console.log('Purchase successful:', response.data);
-            // Clear cart after purchase
-            localStorage.removeItem('product');
-            setCartItems([]); // Reset cart state
-            alert('Purchase successful!');
+            
+            await axios.delete('http://localhost:5099/api/Cart/clear', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,  
+                    'Content-Type': 'application/json'
+                }
+            });
+            alert(`Purchase successful!.`);
+            window.location.reload();
         } catch (error) {
-            console.error('Error making purchase:', error);
+            if (axios.isAxiosError(error)) {
+                console.error('Error making purchase:', error.response?.data || error.message);
+            } else {
+                console.error('Error making purchase:', error);
+            }
             alert('Purchase failed.');
         }
     };
-
+    
     return (
         <div className='shop'>
             <NavHeader />
@@ -78,36 +209,56 @@ function AddToCartPage() {
                         />
                     </div>
                 </div>
-                <div className="container mx-auto p-4">
-                    {cartItems.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            {cartItems.map((product) => (
-                                <div key={product.id} className="border p-4 rounded-md">
-                                    <h3 className="font-semibold text-lg">{product.name}</h3>
-                                    <p className="text-gray-600">Product ID: {product.id}</p>
-                                    <p className="text-gray-600">Quantity: {product.quantity}</p>
-                                    <p className="text-gray-600">Size: {product.size}</p>
-                                    <p className="text-gray-600">Price: ${product.price.toFixed(2)}</p>
-                                    <button
-                                        onClick={() => removeCartItem(product.productId)}
-                                        className="text-red-500 mt-2"
-                                    >
-                                        Remove from Cart
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <p>Your cart is empty.</p>
-                    )}
+                <div className='flex justify-between'>
+                    <div className="container mx-auto p-4 w-4/6">
+                        {cartItems.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                {cartItems.map((item: CartItem) => (
+                                    <div key={item.id} className="border p-4 rounded-md">
+                                        <img src={item.productImage} alt={item.productName} className="w-full h-32 object-cover mb-2 rounded" />
+                                        <h3 className="font-semibold text-lg">{item.productName}</h3>
+                                        <div className="flex items-center mb-2">
+                                            <button onClick={() => decreaseQuantity(item.id)} className="bg-red-500 text-white rounded px-2 py-1">-</button>
+                                            <span className="mx-2">{item.quantity}</span>
+                                            <button onClick={() => increaseQuantity(item.id)} className="bg-green-500 text-white rounded px-2 py-1">+</button>
+                                        </div>
+                                        <p className="text-gray-600">Size: {item.size}</p>
+                                        <p className="text-gray-600">Price: ${(item.price).toFixed(2)}</p>
+                                        <button
+                                            onClick={() => removeCartItem(item.id)}
+                                            className="text-red-500 mt-2"
+                                        >
+                                            Remove from Cart
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p>Your cart is empty.</p>
+                        )}
+                    </div>
+                    <div className="w-2/6 p-4 border rounded-lg shadow-lg">
+                        {user && (
+                            <div>
+                                <Input value={`${user.firstName} ${user.lastName}`} readOnly className="mb-2" />
+                                <Input value={user.email} readOnly className="mb-2" />
+                                <Input value={user.phoneNumber} readOnly className="mb-2" />
+                                <Input placeholder="Address" className="mb-2" />
+                                <Select
+                                    className="w-full border rounded-lg mb-2"
+                                    placeholder="Select Payment Method"
+                                >
+                                    <Option value="card">Card Payment</Option>
+                                    <Option value="vnpay">VNPay</Option>
+                                </Select>
+                                <div className="font-semibold text-lg mb-2">Total: ${calculateTotal()}</div>
+                                <Button type="primary" onClick={handleBuy} disabled={cartItems.length === 0}>
+                                    Buy
+                                </Button>
+                            </div>
+                        )}
+                    </div>
                 </div>
-                <Button 
-                    type="primary" 
-                    onClick={handleBuy}
-                    disabled={cartItems.length === 0} // Disable button if cart is empty
-                >
-                    Buy
-                </Button>
             </div>
             <Footer />
         </div>
