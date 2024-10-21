@@ -1,7 +1,7 @@
+import { Alert, message, Spin } from 'antd';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { Spin, Alert, message } from 'antd';
 import Footer from './Footer';
 import NavHeader from './NavHeader';
 
@@ -74,15 +74,17 @@ function ProductDetail() {
     
         const orderInfo = {
             productId: product.id,
-            productName: product.name,     
-            ProductImage: product.imageUrl,  
+            productName: product.name,
+            ProductImage: product.imageUrl,
             quantity,
             size,
             price: product.discountPrice || product.price,
+            description: product.description,
         };
         try {
-            await axios.post('http://localhost:5099/api/Cart/add', orderInfo.price && orderInfo );           
+            await axios.post('http://localhost:5099/api/Cart/add', orderInfo.price && orderInfo );
             message.success('Product has been added to the cart.');
+            localStorage.setItem('cart', JSON.stringify(orderInfo));
         } catch (error) {
             console.error('Error placing order:', error);
             message.error('Unable to add product to the cart.');

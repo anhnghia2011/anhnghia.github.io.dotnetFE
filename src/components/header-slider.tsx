@@ -1,12 +1,12 @@
-import React, { useRef } from 'react';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 import s6 from "../assets/slide6.jpg";
 import "../style.css";
-import { useNavigate } from 'react-router-dom';
 
 function HeaderSlider() {
     const navigate = useNavigate();
@@ -47,7 +47,7 @@ function HeaderSlider() {
 
             <div>
                 <div className='flex justify-between px-5'>
-                    <p className='w-1440 text-4xl font-bold px-40'>Featured</p>
+                    <p className='w-1440 text-4xl font-bold'>Featured</p>
                     <div className='flex gap-4'>
                         <div className='p-3 rounded-full border border-gray-300 hover:border-blue-300 text-lg cursor-pointer' onClick={handlePrev} >
                             <NavigateBeforeIcon className='text-5xl rounded-full p-1  transition-all'/>

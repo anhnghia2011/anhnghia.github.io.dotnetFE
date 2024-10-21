@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-import NavHeader from './NavHeader';
-import Footer from './Footer';
-import { Select, Button, Input } from 'antd';
+import CloseIcon from '@mui/icons-material/Close';
+import { Button, Input, Select } from 'antd';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import Footer from './Footer';
+import NavHeader from './NavHeader';
 
 const { Option } = Select;
 
@@ -15,6 +16,7 @@ interface CartItem {
     productImage: string;
     unitPrice: number; // Price per unit
     price: number; // Total price for this cart item (quantity * unitPrice)
+    description: string;
 }
 
 interface User {
@@ -153,29 +155,29 @@ const decreaseQuantity = async (cartItemId: number) => {
         }
     
         try {
-            await axios.post('http://localhost:5099/api/Order', 
+            await axios.post('http://localhost:5099/api/Order',
             {
-                customerId: user ? user.id : null, 
+                customerId: user ? user.id : null,
                 cartItems: cartItems.map(item => ({
-                    productId: item.productId,       
-                    quantity: item.quantity,         
-                    size: item.size,                 
-                    productName: item.productName,   
-                    productImage: item.productImage, 
-                    price: item.price                 
-                })),  
-                totalAmount: calculateTotal() 
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    size: item.size,
+                    productName: item.productName,
+                    productImage: item.productImage,
+                    price: item.price
+                })),
+                totalAmount: calculateTotal()
             },
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    'Content-Type': 'application/json' 
+                    'Content-Type': 'application/json'
                 }
             });
             
             await axios.delete('http://localhost:5099/api/Cart/clear', {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,  
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -209,27 +211,31 @@ const decreaseQuantity = async (cartItemId: number) => {
                         />
                     </div>
                 </div>
-                <div className='flex justify-between'>
-                    <div className="container mx-auto p-4 w-4/6">
+                <div className='flex justify-center p-4'>
+                    <div className="container mx-auto p-4 flex justify-center">
                         {cartItems.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div className="w-full">
                                 {cartItems.map((item: CartItem) => (
-                                    <div key={item.id} className="border p-4 rounded-md">
-                                        <img src={item.productImage} alt={item.productName} className="w-full h-32 object-cover mb-2 rounded" />
-                                        <h3 className="font-semibold text-lg">{item.productName}</h3>
-                                        <div className="flex items-center mb-2">
+                                    <div key={item.id} className="border p-4 rounded-md flex gap-4 items-center mb-4 shadow-lg">
+                                       <div className="flex flex-col items-center w-1/4">
+                                       <img src={item.productImage} alt={item.productName} className="w-40 object-cover mb-2 rounded" />
+                                        <div className="flex items-center mb-2 w-2/4">
                                             <button onClick={() => decreaseQuantity(item.id)} className="bg-red-500 text-white rounded px-2 py-1">-</button>
                                             <span className="mx-2">{item.quantity}</span>
                                             <button onClick={() => increaseQuantity(item.id)} className="bg-green-500 text-white rounded px-2 py-1">+</button>
                                         </div>
+                                       </div>
+                                        <div className="w-full text-lg flex justify-between items-center">
+                                       <div>
+                                       <h3 className="font-semibold text-lg">{item.productName}</h3>
                                         <p className="text-gray-600">Size: {item.size}</p>
-                                        <p className="text-gray-600">Price: ${(item.price).toFixed(2)}</p>
-                                        <button
+                                        <p className="text-gray-600 w-1/4">Price: ${(item.price).toFixed(2)}</p>
+                                       </div>
+                                           <CloseIcon 
                                             onClick={() => removeCartItem(item.id)}
-                                            className="text-red-500 mt-2"
-                                        >
-                                            Remove from Cart
-                                        </button>
+                                            className="p-1 bg-slate-400 rounded-50 self-start -mt-10"
+                                            />
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -237,7 +243,7 @@ const decreaseQuantity = async (cartItemId: number) => {
                             <p>Your cart is empty.</p>
                         )}
                     </div>
-                    <div className="w-2/6 p-4 border rounded-lg shadow-lg">
+                    <div className="p-8 border rounded-lg shadow-lg h-fit mt-4">
                         {user && (
                             <div>
                                 <Input value={`${user.firstName} ${user.lastName}`} readOnly className="mb-2" />
@@ -252,7 +258,7 @@ const decreaseQuantity = async (cartItemId: number) => {
                                     <Option value="vnpay">VNPay</Option>
                                 </Select>
                                 <div className="font-semibold text-lg mb-2">Total: ${calculateTotal()}</div>
-                                <Button type="primary" onClick={handleBuy} disabled={cartItems.length === 0}>
+                                <Button type="primary" onClick={handleBuy} disabled={cartItems.length === 0} className="w-40">
                                     Buy
                                 </Button>
                             </div>

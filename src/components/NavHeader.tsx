@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
-import LoginModal from './LoginModal';
+import { useNavigate } from 'react-router-dom';
 import logo from '../assets/nikelogo.png';
+import LoginModal from './LoginModal';
 
 interface User {
     lastName: string;
@@ -94,7 +94,7 @@ function NavHeader() {
                         />
                     </div>
                     <div className='w-6/12'>
-                        <ul className='flex justify-around'>
+                        <ul className='flex justify-around gap-2'>
                             <li className='cursor-pointer' onClick={handleNew}>New & Featured</li>
                             <li className='cursor-pointer' onClick={handleMale}>Men</li>
                             <li className='cursor-pointer' onClick={handleFemale}>Women</li>
