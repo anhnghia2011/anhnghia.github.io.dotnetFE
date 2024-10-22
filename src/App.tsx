@@ -9,13 +9,13 @@ import ShopSoccer from './container/ShopSoccer';
 import ShopYoga from './container/ShopYoga';
 import ProductDetail from './components/ProductDetail';
 import FavoritesPage from './components/FavoritesPage';
-import BuyPage from './components/BuyPage';
+import BuyPage from './components/profilepage';
 import AddCart from './components/AddToCartPage';
 import ShopFemale from './container/Femalepage';
 import ShopKid from './container/Kidpage';
 import ShopNew from './container/Newpage';
 import ShopSale from './container/Salepage';
-
+import Profilepage from './components/profilepage';
 
 function App() {
   return (
@@ -37,6 +37,7 @@ function App() {
                 <Route path="/favorites" element={<FavoritesPage />} />
                 <Route path="/buy" element={<BuyPage />} />
                 <Route path="/add-to-cart" element={<AddCart />} />
+                <Route path="/profile" element={<Profilepage />} />
             </Routes>
         </Router>
   );

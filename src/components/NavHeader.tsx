@@ -7,9 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/nikelogo.png';
 import LoginModal from './LoginModal';
 
-interface User {
-    lastName: string;
-}
 
 function NavHeader() {
     const navigate = useNavigate();
@@ -62,14 +59,7 @@ function NavHeader() {
             setCartItems(0); 
         }
     }, []);
-
-    const handleLoginSuccess = (user: User) => {
-        localStorage.setItem('user', JSON.stringify(user));
-        setIsLoggedIn(true);
-        setLastName(user.lastName);
-        setIsModalOpen(false); 
-    };
-
+    
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
@@ -165,7 +155,6 @@ function NavHeader() {
                 <LoginModal 
                     isOpen={isModalOpen} 
                     onClose={handleCloseModal}
-                    onLoginSuccess={handleLoginSuccess}
                 />
             </div>
         </div>

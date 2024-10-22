@@ -226,14 +226,14 @@ const decreaseQuantity = async (cartItemId: number) => {
                                         </div>
                                        </div>
                                         <div className="w-full text-lg flex justify-between items-center">
-                                       <div>
+                                       <div className='w-4/5'>
                                        <h3 className="font-semibold text-lg">{item.productName}</h3>
                                         <p className="text-gray-600">Size: {item.size}</p>
                                         <p className="text-gray-600 w-1/4">Price: ${(item.price).toFixed(2)}</p>
                                        </div>
                                            <CloseIcon 
                                             onClick={() => removeCartItem(item.id)}
-                                            className="p-1 bg-slate-400 rounded-50 self-start -mt-10"
+                                            className="p-1 bg-slate-400 rounded-50 self-start -mt-12"
                                             />
                                         </div>
                                     </div>
@@ -243,8 +243,8 @@ const decreaseQuantity = async (cartItemId: number) => {
                             <p>Your cart is empty.</p>
                         )}
                     </div>
-                    <div className="p-8 border rounded-lg shadow-lg h-fit mt-4">
-                        {user && (
+                    {user ? (
+                        <div className="p-8 border rounded-lg shadow-lg h-fit mt-4 w-4/6">
                             <div>
                                 <Input value={`${user.firstName} ${user.lastName}`} readOnly className="mb-2" />
                                 <Input value={user.email} readOnly className="mb-2" />
@@ -262,8 +262,10 @@ const decreaseQuantity = async (cartItemId: number) => {
                                     Buy
                                 </Button>
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    ) : (
+                        <p></p>
+                    )}
                 </div>
             </div>
             <Footer />
