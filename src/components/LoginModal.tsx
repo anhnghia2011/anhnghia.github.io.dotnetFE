@@ -13,11 +13,11 @@ interface LoginModalProps {
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
-    const [email, setEmail] = useState<string>(''); // Add type for state
-    const [password, setPassword] = useState<string>(''); // Add type for state
-    const [reCaptchaToken, setReCaptchaToken] = useState<string>(''); // Add type for state
-    const [error, setError] = useState<string>(''); // Add type for state
-    const [isRegisterOpen, setIsRegisterOpen] = useState<boolean>(false); // Add type for state
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>(''); 
+    const [reCaptchaToken, setReCaptchaToken] = useState<string>('');
+    const [error, setError] = useState<string>('');
+    const [isRegisterOpen, setIsRegisterOpen] = useState<boolean>(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

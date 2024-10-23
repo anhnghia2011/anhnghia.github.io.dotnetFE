@@ -2,17 +2,16 @@ import { useEffect, useState } from 'react';
 import Footer from './Footer';
 import NavHeader from './NavHeader';
 import axios from 'axios';
-
 interface Order {
-    id: number;
+    orderId: number;
     orderDate: string;
-    totalprice: number;
+    totalAmount: number;
     status: string;
 }
 
 function Profilepage() {
     const [order, setOrder] = useState<Order[]>([]);
-    const [view, setView] = useState<'profile' | 'orderHistory'>('profile'); // Manage view state
+    const [view, setView] = useState<'profile' | 'orderHistory'>('profile');
 
     // Fetch order history when component mounts
     useEffect(() => {
@@ -72,17 +71,17 @@ function Profilepage() {
                 {view === 'orderHistory' && (
                     <div>
                           {order.map((order: Order) => (
-                            <div key={order.id} className="flex justify-between items-center border-b-2 border-gray-200 py-4">
+                            <div key={order.orderId} className="flex justify-between items-center border-b-2 border-gray-200 py-4">
                               <div>
-                               <p className="text-lg font-semibold">Order ID: {order.id}</p>
-                               <p className="text-sm">Order Date: {order.orderDate}</p>
+                               <p className="text-lg font-semibold">Order ID: {order.orderId}</p>
+                               <p className="text-sm">Order Date: {new Date(order.orderDate).toLocaleDateString("EN-US")}</p>
                              </div>
                            <div>
-                               <p className="text-lg font-semibold">Total: ${order.totalprice}</p>
+                               <p className="text-lg font-semibold">Total: ${order.totalAmount}</p>
                                <p className="text-sm">Status: {order.status}</p>
                            </div>
-                    </div>
-                ))}
+                        </div>
+                    ))}
                     </div>
                 )}
             </div>

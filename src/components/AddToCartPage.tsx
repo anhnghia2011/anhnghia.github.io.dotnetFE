@@ -233,7 +233,7 @@ const decreaseQuantity = async (cartItemId: number) => {
                                        </div>
                                            <CloseIcon 
                                             onClick={() => removeCartItem(item.id)}
-                                            className="p-1 bg-slate-400 rounded-50 self-start -mt-12"
+                                            className="p-1 bg-slate-400 rounded-50 self-start -mt-12 cursor-pointer"
                                             />
                                         </div>
                                     </div>

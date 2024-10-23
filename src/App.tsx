@@ -21,7 +21,6 @@ function App() {
   return (
     <Router>
             <Routes>
-                <Route path="/" element={<Home />} />
                 <Route path="run-shoe" element={<ShopRun />} /> 
                 <Route path="soccer-shoe" element={<ShopSoccer />} />
                 <Route path="gym-shoe" element={<ShopGym />} />
@@ -38,6 +37,7 @@ function App() {
                 <Route path="/buy" element={<BuyPage />} />
                 <Route path="/add-to-cart" element={<AddCart />} />
                 <Route path="/profile" element={<Profilepage />} />
+                <Route path="/" element={<Home />} />
             </Routes>
         </Router>
   );

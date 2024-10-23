@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Nhập axios
+import axios from 'axios'; 
 
 const Footer: React.FC = () => {
     const navigation = useNavigate();
