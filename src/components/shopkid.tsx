@@ -163,7 +163,7 @@ function Shoprun() {
                                             New Arrival
                                         </span>
                                     )}
-                                <img src={product.imageUrl} alt={product.name} className="w-full h-48 object-cover rounded-lg" />
+                                <img src={product.imageUrl} alt={product.name} className="w-full object-cover rounded-lg" />
                                 <h3 className="font-semibold text-lg">{product.name}</h3>
                                 <p className="text-gray-600">
                                         {product.discountPrice ? (

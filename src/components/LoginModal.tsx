@@ -6,6 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RegisterModal from '../components/RegisterModal';
 import logo from '../assets/nikelogo.png';
+import axios from 'axios';
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -27,21 +28,16 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         }
 
         try {
-            const response = await fetch('http://localhost:5099/api/Customers/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email,
-                    password,
-                    reCaptchaToken,
-                }),
+            const response = await axios.post('http://localhost:5099/api/Customers/login', {
+                email,
+                password,
+                reCaptchaToken,
             });
 
-            const data = await response.json();
+            const data = response.data;
 
-            if (response.ok) {
+            // Assuming the API sends a token back upon successful login
+            if (response.status === 200) {
                 localStorage.setItem('token', reCaptchaToken);
                 localStorage.setItem('user', JSON.stringify(data));
                 toast.success('Login successful!');
@@ -51,9 +47,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 setError(data.message || 'Login failed.');
                 toast.error('Login failed!');
             }
-        } catch (error) {
+        } catch (error: unknown) {
             console.error('Error during login:', error);
-            setError('An error occurred during login. Please try again.');
+            if (axios.isAxiosError(error) && error.response) {
+                setError(error.response.data?.message || 'An error occurred during login. Please try again.');
+            } else {
+                setError('An error occurred during login. Please try again.');
+            }
             toast.error('Login failed!');
         }
     };
@@ -69,7 +69,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-white p-4 rounded shadow-md w-1/3 flex flex-col">
-            <img src={logo} alt="Nike Logo" className='float-left w-11 object-cover mb-5'/>
+                <img src={logo} alt="Nike Logo" className='float-left w-11 object-cover mb-5'/>
                 <h2 className="text-lg font-bold mb-4 text-center">Login</h2>
                 {error && <p className="text-red-500 mb-2">{error}</p>}
                 <form onSubmit={handleSubmit}>
@@ -99,7 +99,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                         className="flex justify-center"
                     />
                     <div className='flex flex-col w-full'>
-                        <Button className="bg-blue-500 text-white p-2 rounded-2xl mt-4" onClick={handleSubmit}>
+                        <Button htmlType="submit" className="bg-blue-500 text-white p-2 rounded-2xl mt-4">
                             Login
                         </Button>
                         <Button onClick={onClose} className="p-2 mt-4 rounded-2xl">

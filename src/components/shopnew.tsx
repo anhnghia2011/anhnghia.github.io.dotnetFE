@@ -159,7 +159,7 @@ function Shoprun() {
                                 className="cursor-pointer p-4 border rounded-lg hover:shadow-lg relative"
                                 onClick={() => handleProductClick(product.id)}
                             >
-                                <img src={product.imageUrl} alt={product.name} className="w-full h-48 object-cover rounded-lg" />
+                                <img src={product.imageUrl} alt={product.name} className="w-full object-cover rounded-lg" />
                                 <h3 className="font-semibold text-lg">{product.name}</h3>
                                 <p className="text-gray-600">
                                         {product.discountPrice ? (

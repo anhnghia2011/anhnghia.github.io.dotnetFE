@@ -2,14 +2,20 @@ import { useState, useEffect } from 'react';
 import NavHeader from './NavHeader';
 import Footer from './Footer';
 import { Select } from 'antd';
+import { useNavigate } from 'react-router-dom';
 interface Product {
-    id: string | number;
+    id: number;
     name: string;
-    imageUrl: string;
+    description: string;
     price: number;
+    gender: string;
+    discountPrice?: number;
+    isNew?: boolean;
+    imageUrl: string;
 }
 
 function FavoritesPage() {
+    const navigate = useNavigate();
     const [favorites, setFavorites] = useState<Product[]>([]);
     const [sortOrder, setSortOrder] = useState<string>('price');
 
@@ -35,6 +41,11 @@ function FavoritesPage() {
         });
         setFavorites(sortedFavorites);
     }
+    
+    const handleProductClick = (productId: number) => {
+        navigate(`/product/${productId}`);
+    };
+
 
     return (
         <div>
@@ -56,9 +67,11 @@ function FavoritesPage() {
                         </div>
                         <div className="container mx-auto p-4">
                            {favorites.length > 0 ? (
-                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 cursor-pointer">
                                    {favorites.map((product) => (
-                                       <div key={product.id} className="border p-4 rounded-md">
+                                       <div key={product.id} className="border p-4 rounded-md"
+                                          onClick={() => handleProductClick(product.id)}
+                                       >
                                           <img src={product.imageUrl} alt={product.name} className="w-full object-cover rounded-md" />
                                           <h3 className="font-semibold text-lg">{product.name}</h3>
                                           <p className="text-gray-600">${product.price.toFixed(2)}</p>
