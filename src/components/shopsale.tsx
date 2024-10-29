@@ -34,7 +34,7 @@ function Shoprun() {
         const fetchProducts = async () => {
             try {
                 const response = await axios.get('http://localhost:5099/api/Products/');
-                const newProducts = response.data.filter((product: Product) => product.isNew === false);
+                const newProducts = response.data.filter((product: Product) => product.discountPrice);
                 setProducts(newProducts);
             } catch {
                 setError('Failed to fetch products.');

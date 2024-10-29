@@ -3,6 +3,7 @@ import NavHeader from './NavHeader';
 import Footer from './Footer';
 import { Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 interface Product {
     id: number;
     name: string;
@@ -69,9 +70,7 @@ function FavoritesPage() {
                            {favorites.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 cursor-pointer">
                                    {favorites.map((product) => (
-                                       <div key={product.id} className="border p-4 rounded-md"
-                                          onClick={() => handleProductClick(product.id)}
-                                       >
+                                       <div key={product.id} className="border p-4 rounded-md">
                                           <img src={product.imageUrl} alt={product.name} className="w-full object-cover rounded-md" />
                                           <h3 className="font-semibold text-lg">{product.name}</h3>
                                           <p className="text-gray-600">${product.price.toFixed(2)}</p>
@@ -80,7 +79,8 @@ function FavoritesPage() {
                                               className="text-red-500 mt-2"
                                           >
                                               Remove from Favorites
-                                          </button>
+                                           </button>
+                                           <AddShoppingCartIcon  onClick={() => handleProductClick(product.id)} className='float-right'/>
                                          </div>
                                      ))}
                                  </div>

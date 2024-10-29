@@ -2,7 +2,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import { useEffect, useState } from 'react';
-import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/nikelogo.png';
 import LoginModal from './LoginModal';
@@ -12,8 +11,7 @@ function NavHeader() {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const [isLoggedIn, setIsLoggedIn] = useState(false); 
-    const [lastName, setLastName] = useState(''); 
-    const [cartItems, setCartItems] = useState(0); 
+    const [lastName, setLastName] = useState('');
 
     const handclickhome = () => {
         navigate('/');
@@ -49,14 +47,6 @@ function NavHeader() {
         if (userData && userData.lastName) {
             setIsLoggedIn(true); 
             setLastName(userData.lastName); 
-        }
-
-        const storedCartItems = localStorage.getItem('cart');
-        if (storedCartItems) {
-            const parsedCartItems = JSON.parse(storedCartItems);
-            setCartItems(parsedCartItems.length); 
-        } else {
-            setCartItems(0); 
         }
     }, []);
     
@@ -95,11 +85,6 @@ function NavHeader() {
                     <div className='w-1/5 flex justify-between items-center gap-4'>
                         <div className='relative'>
                             <ShoppingBagIcon className='cursor-pointer' onClick={handleAddToCartClick} />
-                            {cartItems > 0 && (
-                                <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-3 h-3 flex justify-center items-center">
-                                    {cartItems}
-                                </span>
-                            )}
                         </div>
                         <FavoriteBorderIcon onClick={handleFavoriteClick} className='cursor-pointer'/>
                         <div className="relative group">
@@ -138,17 +123,8 @@ function NavHeader() {
                   </div>
                 </div>
 
-                <div className='w-full pb-4'>
-                    <ReactPlayer
-                        url="https://vimeo.com/1013189953"
-                        playing={true}
-                        loop={true}
-                        volume={1}
-                        muted={true} 
-                        controls={true}
-                        width="100%"
-                        height="540px"
-                        className='object-cover shop-video'
+                <div className='w-full pb-4 bg-black shop-video'>
+                    <img src='https://www.kicks.com.co/media/wysiwyg/BannerNike_Header.gif' alt='shop' className='w-full h-96 object-cover'
                     />
                 </div>
 

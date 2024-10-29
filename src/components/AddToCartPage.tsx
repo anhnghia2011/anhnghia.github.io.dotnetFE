@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Footer from './Footer';
 import NavHeader from './NavHeader';
+import TextArea from 'antd/es/input/TextArea';
 
 const { Option } = Select;
 
@@ -30,7 +31,6 @@ interface User {
 function AddToCartPage() {
     const [user, setUser] = useState<User | null>(null);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
-    const [sortOrder, setSortOrder] = useState<string>('price');
 
     // Load cart items from localStorage
     useEffect(() => {
@@ -76,19 +76,6 @@ function AddToCartPage() {
         }
     };
 
-    // Handle sorting
-    const handleSortChange = (value: string) => {
-        setSortOrder(value);
-        const sortedCartItems = [...cartItems].sort((a, b) => {
-            if (value === 'price') {
-                return a.unitPrice - b.unitPrice;
-            } else {
-                return a.productName.localeCompare(b.productName);
-            }
-        });
-        setCartItems(sortedCartItems);
-    };
-
     // Calculate total price considering quantity
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
@@ -125,14 +112,13 @@ const decreaseQuantity = async (cartItemId: number) => {
                 return { ...item, quantity: item.quantity - 1 };
             } else {
                 removeCartItem(cartItemId);
-                return null; // Return null to filter it out later
+                return null; 
             }
         }
         return item;
-    }).filter(item => item !== null); // Filter out null items
+    }).filter(item => item !== null); 
 
     setCartItems(updatedCart);
-    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
 
     // Update quantity in the backend
     const currentItem = updatedCart.find(item => item.id === cartItemId);
@@ -199,17 +185,6 @@ const decreaseQuantity = async (cartItemId: number) => {
             <div className="max-w-[1440px] mx-auto flex flex-col p-10 gap-5">
                 <div className="flex justify-between p-4 mb-3 border rounded-xl">
                     <h2 className="text-2xl font-semibold">Your Cart</h2>
-                    <div className="flex gap-2">
-                        <Select
-                            className="text-white"
-                            defaultValue={sortOrder}
-                            onChange={handleSortChange}
-                            options={[
-                                { label: 'Sort by Price', value: 'price' },
-                                { label: 'Sort by Name', value: 'name' },
-                            ]}
-                        />
-                    </div>
                 </div>
                 <div className='flex justify-center p-4'>
                     <div className="container mx-auto p-4 flex justify-center">
@@ -249,7 +224,7 @@ const decreaseQuantity = async (cartItemId: number) => {
                                 <Input value={`${user.firstName} ${user.lastName}`} readOnly className="mb-2" />
                                 <Input value={user.email} readOnly className="mb-2" />
                                 <Input value={user.phoneNumber} readOnly className="mb-2" />
-                                <Input placeholder="Address" className="mb-2" />
+                                <TextArea placeholder="Enter your address" className="mb-2" />
                                 <Select
                                     className="w-full border rounded-lg mb-2"
                                     placeholder="Select Payment Method"

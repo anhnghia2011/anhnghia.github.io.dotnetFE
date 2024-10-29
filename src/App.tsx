@@ -37,7 +37,7 @@ function App() {
                 <Route path="/buy" element={<BuyPage />} />
                 <Route path="/add-to-cart" element={<AddCart />} />
                 <Route path="/profile" element={<Profilepage />} />
-                <Route path="/" element={<Home />} />
+                <Route path="*" element={<Home />} />
             </Routes>
         </Router>
   );

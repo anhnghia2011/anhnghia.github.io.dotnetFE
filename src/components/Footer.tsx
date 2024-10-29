@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input } from 'antd';
+import { Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 
@@ -18,14 +18,13 @@ const Footer: React.FC = () => {
         };
         
         try {
-            // Gọi API để gửi phản hồi
             const response = await axios.post('http://localhost:5099/api/Feedback', feedbackData);
             console.log("Feedback submitted successfully:", response.data);
+            message.success('Feedback submitted successfully!');
         } catch (error) {
             console.error("Error submitting feedback:", error);
+            message.error('Failed to submit feedback. Please try again.');
         }
-
-        // Reset các trường nhập liệu
         setName('');
         setEmail('');
         setFeedback('');

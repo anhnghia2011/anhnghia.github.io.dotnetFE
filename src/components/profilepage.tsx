@@ -41,24 +41,22 @@ function Profilepage() {
             const parsedInfo: UserInfo = JSON.parse(userInfo);
             setInfo(parsedInfo);
             setCurrentInfo(parsedInfo);
+
+            const fetchOrders = async () => {
+                try {
+                    setLoading(true);
+                    const response = await axios.get(`http://localhost:5099/api/Order/user/${parsedInfo.id}`);
+                    setOrders(response.data);
+                    setNoOrders(response.data.length === 0);
+                } catch {
+                    message.error('Failed to fetch order data.');
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchOrders();
         }
-
-        const fetchOrders = async () => {
-            try {
-                setLoading(true);
-                const response = await axios.get('http://localhost:5099/api/Order');
-                setOrders(response.data);
-                setNoOrders(response.data.length === 0);
-            } catch {
-                message.error('Failed to fetch order data.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchOrders();
     }, []);
-
     const handleFormSubmit = async (values: UserInfo) => {
         const storedUser = localStorage.getItem('user');
         const user = storedUser ? JSON.parse(storedUser) : null;
@@ -251,7 +249,6 @@ function Profilepage() {
                                     className="border-b border-gray-200 py-2 cursor-pointer"
                                 >
                                     <div className="flex justify-between items-center">
-                                        <span className="text-lg">Order ID: {order.orderId}</span>
                                         <span className="text-lg">Total: ${order.totalAmount}</span>
                                     </div>
                                     <p className="text-sm">Order Date: {new Date(order.orderDate).toLocaleDateString("EN-US")}</p>
