@@ -52,7 +52,6 @@ function Shoprun() {
         }
     }, []);
 
-
     const toggleFavorite = (product: Product) => {
         const newFavorites = favorites.some(fav => fav.id === product.id)
             ? favorites.filter(fav => fav.id !== product.id)
@@ -97,7 +96,7 @@ function Shoprun() {
             }
         });
     };
-        
+
     return (
         <div className="max-w-[1440px] mx-auto flex flex-col p-10 gap-5">
             <div className='flex p-10 gap-5'>
@@ -152,22 +151,22 @@ function Shoprun() {
                         </div>
                     </div>
                     {loading && <Spin size="large" />}
-                    {error && <Alert message={error} type="error" />}
-                    <div className="product-list grid grid-cols-1 md:grid-cols-3 gap-4 rounded-xl min-h-1/2">
-                        {filteredProducts.map(product => (
-                            <div
-                                key={product.id}
-                                className="cursor-pointer p-4 border rounded-lg hover:shadow-lg relative"
-                                onClick={() => handleProductClick(product.id)}
-                            >
-                                {product.isNew && (
+                        {error && <Alert message={error} type="error" />}
+                        <div className="product-list grid grid-cols-1 md:grid-cols-3 gap-4 rounded-xl min-h-1/2">
+                            {filteredProducts.map(product => (
+                                <div
+                                    key={product.id}
+                                    className="cursor-pointer p-4 border rounded-lg hover:shadow-lg relative"
+                                    onClick={() => handleProductClick(product.id)}
+                                >
+                                    {product.isNew && (
                                         <span className="absolute top-0 left-0 bg-green-200 text-green-700 px-2 py-1 text-xs font-semibold rounded-br-lg">
                                             New Arrival
                                         </span>
                                     )}
-                                <img src={product.imageUrl} alt={product.name} className="w-full object-cover rounded-lg" />
-                                <h3 className="font-semibold text-lg">{product.name}</h3>
-                                <p className="text-gray-600">
+                                    <img src={product.imageUrl} alt={product.name} className="w-full object-cover rounded-md" />
+                                    <h3 className="font-semibold text-lg">{product.name}</h3>
+                                    <p className="text-gray-600">
                                         {product.discountPrice ? (
                                             <>
                                                 <span className="line-through text-gray-400">${product.price.toFixed(2)}</span>
@@ -190,5 +189,4 @@ function Shoprun() {
         </div>
     );
 }
-
 export default Shoprun;

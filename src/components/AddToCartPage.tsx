@@ -9,19 +9,17 @@ import TextArea from 'antd/es/input/TextArea';
 const { Option } = Select;
 
 interface CartItem {
-    id: number; // This should be the cart item ID
-    productId: number; // This is the product ID
+    id: number;
+    productId: number;
     quantity: number;
     size: number;
     productName: string;
     productImage: string;
-    unitPrice: number; // Price per unit
-    price: number; // Total price for this cart item (quantity * unitPrice)
-    description: string;
+    price: number;
 }
 
 interface User {
-    id: number; // Add this line
+    id: number; 
     firstName: string;
     lastName: string;
     email: string;
@@ -32,13 +30,11 @@ function AddToCartPage() {
     const [user, setUser] = useState<User | null>(null);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-    // Load cart items from localStorage
     useEffect(() => {
         const storedCartItems = localStorage.getItem('cartItems');
         setCartItems(storedCartItems ? JSON.parse(storedCartItems) : []);
     }, []);
 
-    // Fetch user from local storage
     useEffect(() => {
         const userData = localStorage.getItem('user');
         if (!userData) {
@@ -49,7 +45,6 @@ function AddToCartPage() {
         setUser(parsedUser);
     }, []);
 
-    // Fetch cart items from API
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
@@ -62,7 +57,6 @@ function AddToCartPage() {
         fetchCartItems();
     }, []);
 
-    // Remove item from cart
     const removeCartItem = async (cartItemId: number) => {
         try {
             await axios.delete(`http://localhost:5099/api/Cart/remove/${cartItemId}`, {
@@ -75,14 +69,9 @@ function AddToCartPage() {
             console.error('Error removing cart item:', error);
         }
     };
-
-    // Calculate total price considering quantity
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
     };
-
-   // Increase quantity
-// Increase quantity
 const increaseQuantity = async (cartItemId: number) => {
     const updatedCart = cartItems.map(item => 
         item.id === cartItemId ? { ...item, quantity: item.quantity + 1 } : item
@@ -90,8 +79,6 @@ const increaseQuantity = async (cartItemId: number) => {
 
     setCartItems(updatedCart);
     localStorage.setItem('cartItems', JSON.stringify(updatedCart));
-
-    // Update quantity in the backend
     const updatedItem = updatedCart.find(item => item.id === cartItemId);
     if (updatedItem) {
         try {
@@ -119,8 +106,6 @@ const decreaseQuantity = async (cartItemId: number) => {
     }).filter(item => item !== null); 
 
     setCartItems(updatedCart);
-
-    // Update quantity in the backend
     const currentItem = updatedCart.find(item => item.id === cartItemId);
     if (currentItem) {
         try {
@@ -133,52 +118,55 @@ const decreaseQuantity = async (cartItemId: number) => {
     }
 };
 
-    // Buy all items in the cart
-    const handleBuy = async () => {
-        if (cartItems.length === 0) {
-            alert('Not ffound Products in Cart');
-            return;
-        }
-    
-        try {
-            await axios.post('http://localhost:5099/api/Order',
-            {
-                customerId: user ? user.id : null,
-                cartItems: cartItems.map(item => ({
-                    productId: item.productId,
-                    quantity: item.quantity,
-                    size: item.size,
-                    productName: item.productName,
-                    productImage: item.productImage,
-                    price: item.price
-                })),
-                totalAmount: calculateTotal()
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            await axios.delete('http://localhost:5099/api/Cart/clear', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            alert(`Purchase successful!.`);
-            window.location.reload();
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.error('Error making purchase:', error.response?.data || error.message);
-            } else {
-                console.error('Error making purchase:', error);
+const handleBuy = async () => {
+    if (cartItems.length === 0) {
+        alert('No products found in the cart.');
+        return;
+    }
+
+    try {
+        const response = await axios.post('http://localhost:5099/api/Order', {
+            orderId: 0,
+            customerId: user ? user.id : 0, 
+            orderDate: new Date().toISOString(), 
+            status: "Pending",
+            totalAmount: parseFloat(calculateTotal()), 
+            cartItems: cartItems.map(item => ({
+                id: item.id,
+                productId: item.productId,
+                quantity: item.quantity,
+                size: item.size,
+                productName: item.productName,
+                productImage: item.productImage,
+                price: item.price
+            }))
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
             }
-            alert('Purchase failed.');
+        });
+
+        // Clear the cart after successful order creation
+        await axios.delete('http://localhost:5099/api/Cart/clear', {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        alert(`Purchase successful! Your order ID is ${response.data.orderId}.`);
+        window.location.reload(); // Optionally reload the page to reflect changes
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Error making purchase:', error.response?.data || error.message);
+        } else {
+            console.error('Error making purchase:', error);
         }
-    };
-    
+        alert('Purchase failed. Please try again.');
+    }
+};
+
     return (
         <div className='shop'>
             <NavHeader />
