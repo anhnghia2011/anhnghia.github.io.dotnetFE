@@ -53,7 +53,7 @@ const Footer: React.FC = () => {
                     <form onSubmit={handleSubmit} className='flex flex-col mt-2'>
                         <Input 
                             type='text' 
-                            placeholder='Your name' // Thêm trường tên
+                            placeholder='Your name'
                             value={name} 
                             onChange={(e) => setName(e.target.value)} 
                             className='p-2 border rounded mb-2' 

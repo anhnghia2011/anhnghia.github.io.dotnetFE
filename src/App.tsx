@@ -1,4 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import Home from './container/HomePage';
 import ShopMale from './container/Malepage';
 import ShopBasketball from './container/ShopBasketball';
@@ -18,8 +20,20 @@ import ShopSale from './container/Salepage';
 import Profilepage from './components/profilepage';
 
 function App() {
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+  };
+  
   return (
     <Router>
+       <ScrollToTop />
             <Routes>
                 <Route path="run-shoe" element={<ShopRun />} /> 
                 <Route path="soccer-shoe" element={<ShopSoccer />} />

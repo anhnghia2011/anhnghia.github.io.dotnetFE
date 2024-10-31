@@ -236,7 +236,6 @@ function Profilepage() {
 
                 {view === 'orderHistory' && (
                     <div className="bg-white rounded-lg shadow-md p-8 transition-all border-t-4 space-y-6 w-full md:w-1/3 mx-auto">
-                        <h2 className="text-2xl mb-4">Order History</h2>
                         {loading ? (
                             <Spin />
                         ) : noOrders ? (
