@@ -1,7 +1,7 @@
+import { Input } from 'antd';
+import axios from 'axios';
 import React, { useState } from 'react';
-import { Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; 
 
 const Footer: React.FC = () => {
     const navigation = useNavigate();
@@ -20,10 +20,8 @@ const Footer: React.FC = () => {
         try {
             const response = await axios.post('http://localhost:5099/api/Feedback', feedbackData);
             console.log("Feedback submitted successfully:", response.data);
-            message.success('Feedback submitted successfully!');
         } catch (error) {
             console.error("Error submitting feedback:", error);
-            message.error('Failed to submit feedback. Please try again.');
         }
         setName('');
         setEmail('');

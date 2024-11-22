@@ -57,7 +57,7 @@ function Shoprun() {
     };
 
     const sortedProducts = [...products].sort((a, b) => {
-        if (sortOrder === 'price') return a.price - b.price;
+        if (sortOrder === 'price') return (a.discountPrice ?? a.price) - (b.discountPrice ?? b.price);
         if (sortOrder === 'name') return a.name.localeCompare(b.name);
         return 0;
     });

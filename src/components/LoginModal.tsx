@@ -1,12 +1,12 @@
 // LoginModal.tsx
+import { Button, Input } from "antd";
+import axios from 'axios';
 import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { Input, Button } from "antd";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import RegisterModal from '../components/RegisterModal';
 import logo from '../assets/nikelogo.png';
-import axios from 'axios';
+import RegisterModal from '../components/RegisterModal';
 
 interface LoginModalProps {
     isOpen: boolean;

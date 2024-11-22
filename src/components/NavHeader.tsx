@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Input } from 'antd';
-import axios from 'axios';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import { Input } from 'antd';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import logo from '../assets/nikelogo.png';
 import LoginModal from './LoginModal';
 

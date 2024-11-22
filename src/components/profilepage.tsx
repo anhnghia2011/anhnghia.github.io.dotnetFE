@@ -1,9 +1,9 @@
+import { LockOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Modal, Pagination, Spin, message } from 'antd';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Footer from './Footer';
 import NavHeader from './NavHeader';
-import axios from 'axios';
-import { Input, Form, Button, Pagination, Spin, Modal, message } from 'antd';
-import { LockOutlined } from '@ant-design/icons';
 
 interface Order {
     orderId: number;
@@ -79,6 +79,8 @@ function Profilepage() {
                     const response = await axios.put(`http://localhost:5099/api/Customers/update/${user.id}`, updatedValues);
                     if (response.status === 200) {
                         message.success('Profile updated successfully!');
+                        localStorage.setItem('user', JSON.stringify(updatedValues));
+                        window.location.reload();
                         setInfo(updatedValues);
                     }
                 }
