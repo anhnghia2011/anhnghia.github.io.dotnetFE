@@ -79,11 +79,11 @@ function ProductDetail() {
             quantity,
             size,
             price: product.discountPrice || product.price,
-            description: product.description,
         };
         try {
             await axios.post('http://localhost:5099/api/Cart/add', orderInfo.price && orderInfo );
             message.success('Product has been added to the cart.');
+            localStorage.setItem('cart', JSON.stringify(orderInfo));
         } catch (error) {
             console.error('Error placing order:', error);
             message.error('Unable to add product to the cart.');

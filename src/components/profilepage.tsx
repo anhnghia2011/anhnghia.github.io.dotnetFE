@@ -49,7 +49,7 @@ function Profilepage() {
                     setOrders(response.data);
                     setNoOrders(response.data.length === 0);
                 } catch {
-                    message.error('Failed to fetch order data.');
+                    setNoOrders(true);
                 } finally {
                     setLoading(false);
                 }

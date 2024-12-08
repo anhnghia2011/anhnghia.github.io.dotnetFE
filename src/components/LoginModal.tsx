@@ -33,16 +33,18 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 password,
                 reCaptchaToken,
             });
-
             const data = response.data;
-
-            // Assuming the API sends a token back upon successful login
             if (response.status === 200) {
                 localStorage.setItem('token', reCaptchaToken);
                 localStorage.setItem('user', JSON.stringify(data));
+                localStorage.setItem('role', data.role);
                 toast.success('Login successful!');
-                onClose();
                 window.location.reload();
+                onClose();
+               if (localStorage.getItem('role') === 'Admin') {
+                    window.location.href = '/admin';
+                    toast.success('Login successful!');
+                }
             } else {
                 setError(data.message || 'Login failed.');
                 toast.error('Login failed!');

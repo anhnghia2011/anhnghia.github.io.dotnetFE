@@ -1,23 +1,22 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
+import AddCart from './components/AddToCartPage';
+import AdminPage from './components/AdminPage';
+import FavoritesPage from './components/FavoritesPage';
+import ProductDetail from './components/ProductDetail';
+import { default as BuyPage, default as Profilepage } from './components/profilepage';
+import ShopFemale from './container/Femalepage';
 import Home from './container/HomePage';
+import ShopKid from './container/Kidpage';
 import ShopMale from './container/Malepage';
+import ShopNew from './container/Newpage';
+import ShopSale from './container/Salepage';
 import ShopBasketball from './container/ShopBasketball';
 import ShopDance from './container/ShopDance';
 import ShopGym from './container/ShopGym';
 import ShopRun from './container/ShopRun';
 import ShopSoccer from './container/ShopSoccer';
 import ShopYoga from './container/ShopYoga';
-import ProductDetail from './components/ProductDetail';
-import FavoritesPage from './components/FavoritesPage';
-import BuyPage from './components/profilepage';
-import AddCart from './components/AddToCartPage';
-import ShopFemale from './container/Femalepage';
-import ShopKid from './container/Kidpage';
-import ShopNew from './container/Newpage';
-import ShopSale from './container/Salepage';
-import Profilepage from './components/profilepage';
 
 function App() {
 
@@ -51,6 +50,7 @@ const ScrollToTop = () => {
                 <Route path="/buy" element={<BuyPage />} />
                 <Route path="/add-to-cart" element={<AddCart />} />
                 <Route path="/profile" element={<Profilepage />} />
+                <Route path="/admin" element={<AdminPage />} />
                 <Route path="*" element={<Home />} />
             </Routes>
         </Router>

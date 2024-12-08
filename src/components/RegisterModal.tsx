@@ -1,6 +1,6 @@
+import { Button, Form, Input } from 'antd';
 import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { Form, Input, Button } from 'antd';
 import logo from '../assets/nikelogo.png';
 
 interface RegisterModalProps {
@@ -56,74 +56,75 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-4 rounded shadow-md w-1/3 flex flex-col">
-                <img src={logo} alt="Nike Logo" className='float-left w-11 object-cover mb-5'/>
-                <h2 className="text-lg font-bold mb-4 text-center">Register</h2>
-                {error && <p className="text-red-500 mb-2">{error}</p>}
-                
-                <Form
-                    layout="vertical"
-                    onFinish={onFinish}
-                    autoComplete="off"
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
+        <div className="bg-white p-6 rounded shadow-md w-full max-w-lg max-h-[90vh] overflow-y-auto flex flex-col">
+            <img src={logo} alt="Nike Logo" className="w-12 h-auto object-cover mb-4 mx-auto" />
+            <h2 className="text-xl font-bold mb-4 text-center">Register</h2>
+            {error && <p className="text-red-500 mb-4">{error}</p>}
+    
+            <Form
+                layout="vertical"
+                onFinish={onFinish}
+                autoComplete="off"
+            >
+                <Form.Item
+                    label="First Name"
+                    name="firstName"
+                    rules={[{ required: true, message: 'Please enter your first name' }]}
                 >
-                    <Form.Item
-                        label="First Name"
-                        name="firstName"
-                        rules={[{ required: true, message: 'Please enter your first name' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Last Name"
-                        name="lastName"
-                        rules={[{ required: true, message: 'Please enter your last name' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Email"
-                        name="email"
-                        rules={[{ required: true, type: 'email', message: 'Please enter a valid email' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Phone Number"
-                        name="phoneNumber"
-                        rules={[{ required: true, message: 'Please enter your phone number' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Password"
-                        name="password"
-                        rules={[{ required: true, message: 'Please enter your password' }]}
-                    >
-                        <Input.Password />
-                    </Form.Item>
-
-                    <ReCAPTCHA
-                        sitekey="6Leo6VkqAAAAAGnZKkjTKpSp6cBWfxsSlSzPhtWQ" 
-                        onChange={onReCaptchaChange}
-                        className="flex justify-center mb-4"
-                    />
-
-                    <div className='flex flex-col w-full'>
-                        <Button type="primary" htmlType="submit" className="bg-blue-500 text-white p-5 rounded-3xl mt-4">
-                            Register
-                        </Button>
-                        <Button onClick={onClose} className="p-5 mt-4 rounded-3xl">
-                            Close
-                        </Button>
-                    </div>
-                </Form>
-            </div>
+                    <Input />
+                </Form.Item>
+    
+                <Form.Item
+                    label="Last Name"
+                    name="lastName"
+                    rules={[{ required: true, message: 'Please enter your last name' }]}
+                >
+                    <Input />
+                </Form.Item>
+    
+                <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[{ required: true, type: 'email', message: 'Please enter a valid email' }]}
+                >
+                    <Input />
+                </Form.Item>
+    
+                <Form.Item
+                    label="Phone Number"
+                    name="phoneNumber"
+                    rules={[{ required: true, message: 'Please enter your phone number' }]}
+                >
+                    <Input />
+                </Form.Item>
+    
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[{ required: true, message: 'Please enter your password' }]}
+                >
+                    <Input.Password />
+                </Form.Item>
+    
+                <ReCAPTCHA
+                    sitekey="6Leo6VkqAAAAAGnZKkjTKpSp6cBWfxsSlSzPhtWQ"
+                    onChange={onReCaptchaChange}
+                    className="flex justify-center mb-4"
+                />
+    
+                <div className="flex flex-col w-full">
+                    <Button type="primary" htmlType="submit" className="bg-blue-500 text-white py-2 rounded-3xl mt-4">
+                        Register
+                    </Button>
+                    <Button onClick={onClose} className="py-2 mt-4 rounded-3xl">
+                        Close
+                    </Button>
+                </div>
+            </Form>
         </div>
+    </div>
+    
     );
 };
 
